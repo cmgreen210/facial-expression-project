@@ -1,0 +1,51 @@
+from django import forms
+from django.template.defaultfilters import filesizeformat
+from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
+
+
+class LimitedFileField(forms.FileField):
+    def __init__(self, *args, **kwargs):
+        self.content_types = kwargs.pop('content_types', None)
+        self.max_upload_size = kwargs.pop('max_upload_size', None)
+        if not self.max_upload_size:
+            self.max_upload_size = settings.MAX_UPLOAD_SIZE
+
+        super(LimitedFileField, self).__init__(*args, **kwargs)
+
+    def clean(self, *args, **kwargs):
+        data = super(LimitedFileField, self).clean(*args, **kwargs)
+        try:
+            if data.content_type in self.content_types:
+                if data.size > self.max_upload_size:
+                    msg = _(('File size must '
+                            'be under {0}!').format(self.max_upload_size))
+                    raise forms.ValidationError(msg)
+            else:
+                msg = _(('File type ({0}) is not'
+                         ' supported.').format(data.content_type))
+                raise forms.ValidationError(msg)
+        except AttributeError:
+            pass
+
+        return data
+
+
+class LimitedImageField(forms.ImageField):
+    def __init__(self, *args, **kwargs):
+        self.max_upload_size = kwargs.pop('max_upload_size', None)
+        if not self.max_upload_size:
+            self.max_upload_size = settings.MAX_UPLOAD_SIZE
+        super(LimitedImageField, self).__init__(*args, **kwargs)
+
+    def clean(self, *args, **kwargs):
+        data = super(LimitedImageField, self).clean(*args, **kwargs)
+        try:
+            if data.size > self.max_upload_size:
+                msg = _(('File size must '
+                         'be under {0}!').format(self.max_upload_size))
+                raise forms.ValidationError(msg)
+        except AttributeError:
+            pass
+
+        return data
