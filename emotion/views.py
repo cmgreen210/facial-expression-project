@@ -14,9 +14,10 @@ def get_video(request):
         form = VideoForm(request.POST, request.FILES)
         if form.is_valid():
             video_file = request.FILES['video_file']
-            path = default_storage.save('tmp/video/vid',
+            _, ext = os.path.splitext(video_file._name)
+            path = default_storage.save('tmp_video/vid' + ext,
                                         ContentFile(video_file.read()))
-            tmp_file = os.path.join(settings.MEDIA_ROOT, path)
+            # tmp_file = os.path.join(settings.MEDIA_ROOT, path)
 
             return HttpResponseRedirect('/')
     else:
