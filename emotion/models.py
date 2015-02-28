@@ -2,16 +2,22 @@ from django.db import models
 
 
 class ClassificationRequest(models.Model):
-
+    """
+    Stores a user request for face classification.
+    """
     timestamp = models.DateTimeField(auto_now=True)
 
-    # 0 - video upload
-    # 1 - image upload
-    type = models.PositiveIntegerField()
+    type = models.PositiveIntegerField(help_text="0 for video, 1 for image,\
+                                                 any other undefined")
 
 
 class ImageClassification(models.Model):
+    """
+    Stores the information for a single image frame
+    classification, related to :model:`emotion.ClassificationRequest`.
 
+    The 48x48 pixel image is stored row-wise as a csv string.
+    """
     request = models.ForeignKey('ClassificationRequest')
 
     # String of pixels comma separated (48 x 48) image
