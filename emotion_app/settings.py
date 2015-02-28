@@ -82,9 +82,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-CONTENT_TYPES = ['image', 'video']
-# Add to your settings file
-CONTENT_TYPES = ['image', 'video']
+CONTENT_TYPES = ['image']
+VIDEO_TYPES = ['video/quicktime']
 # 2.5MB - 2621440
 # 5MB - 5242880
 # 10MB - 10485760

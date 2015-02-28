@@ -1,16 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
+from django.template import RequestContext
 from django.http import HttpResponseRedirect
-from forms import LimitedImageField, LimitedFileField
+from forms import VideoForm, ImageForm
 
 
 def get_video(request):
 
     if request.method == 'POST':
-        form = LimitedFileField(request.POST)
-
+        form = VideoForm(request.POST, request.FILES)
         if form.is_valid():
-            return HttpResponseRedirect('/success/')
+            return HttpResponseRedirect('/')
     else:
-        form = LimitedFileField()
+        form = VideoForm()
 
-    return render(request, 'emotion/video.html', {'form': form})
+    return render_to_response('emotion/video.html', {'form': form},
+                              context_instance=RequestContext(request))

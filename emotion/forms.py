@@ -10,6 +10,8 @@ class LimitedFileField(forms.FileField):
         self.max_upload_size = kwargs.pop('max_upload_size', None)
         if not self.max_upload_size:
             self.max_upload_size = settings.MAX_UPLOAD_SIZE
+        if not self.content_types:
+            self.content_types = set(settings.VIDEO_TYPES)
 
         super(LimitedFileField, self).__init__(*args, **kwargs)
 
@@ -52,8 +54,11 @@ class LimitedImageField(forms.ImageField):
 
 
 class VideoForm(forms.Form):
-    video_field = LimitedFileField(label="Video")
+    video_file = LimitedFileField(label="Upload video for analysis",
+                                  error_messages={'required':
+                                                  'Please select a video'})
 
 
 class ImageForm(forms.Form):
-    image_field = LimitedImageField(label="Image")
+    image_file = LimitedImageField(label="Image")
+
