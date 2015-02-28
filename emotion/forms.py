@@ -49,3 +49,11 @@ class LimitedImageField(forms.ImageField):
             pass
 
         return data
+
+
+class VideoForm(forms.Form):
+    video_field = LimitedFileField(label="Video")
+
+
+class ImageForm(forms.Form):
+    image_field = LimitedImageField(label="Image")
