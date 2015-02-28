@@ -1,4 +1,13 @@
 from django.db import models
+from django.core.exceptions import ValidationError
+
+
+def validate_request_type(value):
+    """
+    Validates that the request type is either 0 or 1
+    """
+    if value != 0 and value != 1:
+        raise ValidationError('Invalid classification type: {0}'.format(value))
 
 
 class ClassificationRequest(models.Model):
@@ -8,7 +17,16 @@ class ClassificationRequest(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
 
     type = models.PositiveIntegerField(help_text="0 for video, 1 for image,\
-                                                 any other undefined")
+                                                 any other undefined",
+                                       validators=[validate_request_type])
+
+
+def validate_image_csv(value, height=48, width=48, separator=','):
+    """Validates that the image values are stored correctly"""
+    n = height * width
+    l = value.split(separator)
+    if len(l) != n:
+        raise ValidationError('Image csv is not of right size!')
 
 
 class ImageClassification(models.Model):
@@ -21,26 +39,26 @@ class ImageClassification(models.Model):
     request = models.ForeignKey('ClassificationRequest')
 
     # String of pixels comma separated (48 x 48) image
-    image = models.TextField()
+    image = models.TextField(validators=[validate_image_csv])
 
-    # Rank 
+    # Rank
     rank1 = models.PositiveIntegerField()
-    rank1_prob = models.CharField(max_length=15)
+    rank1_prob = models.FloatField(default=0.0)
 
     rank2 = models.PositiveIntegerField()
-    rank2_prob = models.CharField(max_length=15)
+    rank2_prob = models.FloatField(default=0.0)
 
     rank3 = models.PositiveIntegerField()
-    rank3_prob = models.CharField(max_length=15)
+    rank3_prob = models.FloatField(default=0.0)
 
     rank4 = models.PositiveIntegerField()
-    rank4_prob = models.CharField(max_length=15)
+    rank4_prob = models.FloatField(default=0.0)
 
     rank5 = models.PositiveIntegerField()
-    rank5_prob = models.CharField(max_length=15)
+    rank5_prob = models.FloatField(default=0.0)
 
     rank6 = models.PositiveIntegerField()
-    rank6_prob = models.CharField(max_length=15)
+    rank6_prob = models.FloatField(default=0.0)
 
     rank7 = models.PositiveIntegerField()
-    rank7_prob = models.CharField(max_length=15)
+    rank7_prob = models.FloatField(default=0.0)
