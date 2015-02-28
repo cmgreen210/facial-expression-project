@@ -5,9 +5,14 @@
     <title></title>
 </head>
 <body>
-    <form action="/your-video/" method="post">
+    <form action="#" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form }}
+        <p>{{ form.non_field_errors }}</p>
+        <p>{{ form.video_file.label_tag }} {{ form.docfile.help_text }}</p>
+        <p>
+            {{ form.video_file.errors }}
+            {{ form.video_file }}
+        </p>
         <input type="submit" value="Submit"/>
     </form>
 </body>
