@@ -1,79 +1,50 @@
 # -*- coding: utf-8 -*-
-from south.utils import datetime_utils as datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+import emotion.models
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'ClassificationRequest'
-        db.create_table(u'emotion_classificationrequest', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('timestamp', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('type', self.gf('django.db.models.fields.PositiveIntegerField')()),
-        ))
-        db.send_create_signal(u'emotion', ['ClassificationRequest'])
+    dependencies = [
+    ]
 
-        # Adding model 'ImageClassification'
-        db.create_table(u'emotion_imageclassification', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('request', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['emotion.ClassificationRequest'])),
-            ('image', self.gf('django.db.models.fields.TextField')()),
-            ('rank1', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('rank1_prob', self.gf('django.db.models.fields.CharField')(max_length=15)),
-            ('rank2', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('rank2_prob', self.gf('django.db.models.fields.CharField')(max_length=15)),
-            ('rank3', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('rank3_prob', self.gf('django.db.models.fields.CharField')(max_length=15)),
-            ('rank4', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('rank4_prob', self.gf('django.db.models.fields.CharField')(max_length=15)),
-            ('rank5', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('rank5_prob', self.gf('django.db.models.fields.CharField')(max_length=15)),
-            ('rank6', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('rank6_prob', self.gf('django.db.models.fields.CharField')(max_length=15)),
-            ('rank7', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('rank7_prob', self.gf('django.db.models.fields.CharField')(max_length=15)),
-        ))
-        db.send_create_signal(u'emotion', ['ImageClassification'])
-
-
-    def backwards(self, orm):
-        # Deleting model 'ClassificationRequest'
-        db.delete_table(u'emotion_classificationrequest')
-
-        # Deleting model 'ImageClassification'
-        db.delete_table(u'emotion_imageclassification')
-
-
-    models = {
-        u'emotion.classificationrequest': {
-            'Meta': {'object_name': 'ClassificationRequest'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'type': ('django.db.models.fields.PositiveIntegerField', [], {})
-        },
-        u'emotion.imageclassification': {
-            'Meta': {'object_name': 'ImageClassification'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.TextField', [], {}),
-            'rank1': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'rank1_prob': ('django.db.models.fields.CharField', [], {'max_length': '15'}),
-            'rank2': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'rank2_prob': ('django.db.models.fields.CharField', [], {'max_length': '15'}),
-            'rank3': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'rank3_prob': ('django.db.models.fields.CharField', [], {'max_length': '15'}),
-            'rank4': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'rank4_prob': ('django.db.models.fields.CharField', [], {'max_length': '15'}),
-            'rank5': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'rank5_prob': ('django.db.models.fields.CharField', [], {'max_length': '15'}),
-            'rank6': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'rank6_prob': ('django.db.models.fields.CharField', [], {'max_length': '15'}),
-            'rank7': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'rank7_prob': ('django.db.models.fields.CharField', [], {'max_length': '15'}),
-            'request': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['emotion.ClassificationRequest']"})
-        }
-    }
-
-    complete_apps = ['emotion']
+    operations = [
+        migrations.CreateModel(
+            name='ClassificationRequest',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('timestamp', models.DateTimeField(auto_now=True)),
+                ('type', models.PositiveIntegerField(help_text=b'0 for video, 1 for image,                                                 any other undefined', validators=[emotion.models.validate_request_type])),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='ImageClassification',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('image', models.TextField(validators=[emotion.models.validate_image_csv])),
+                ('rank1', models.PositiveIntegerField()),
+                ('rank1_prob', models.FloatField(default=0.0)),
+                ('rank2', models.PositiveIntegerField()),
+                ('rank2_prob', models.FloatField(default=0.0)),
+                ('rank3', models.PositiveIntegerField()),
+                ('rank3_prob', models.FloatField(default=0.0)),
+                ('rank4', models.PositiveIntegerField()),
+                ('rank4_prob', models.FloatField(default=0.0)),
+                ('rank5', models.PositiveIntegerField()),
+                ('rank5_prob', models.FloatField(default=0.0)),
+                ('rank6', models.PositiveIntegerField()),
+                ('rank6_prob', models.FloatField(default=0.0)),
+                ('rank7', models.PositiveIntegerField()),
+                ('rank7_prob', models.FloatField(default=0.0)),
+                ('request', models.ForeignKey(to='emotion.ClassificationRequest')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+    ]
