@@ -61,4 +61,3 @@ class VideoForm(forms.Form):
 
 class ImageForm(forms.Form):
     image_file = LimitedImageField(label="Image")
-
