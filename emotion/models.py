@@ -19,22 +19,22 @@ class ImageClassification(models.Model):
 
     # Rank 
     rank1 = models.PositiveIntegerField()
-    rank1_prob = models.CharField(max_length=15)()
+    rank1_prob = models.CharField(max_length=15)
 
     rank2 = models.PositiveIntegerField()
-    rank2_prob = models.CharField(max_length=15)()
+    rank2_prob = models.CharField(max_length=15)
 
     rank3 = models.PositiveIntegerField()
-    rank3_prob = models.CharField(max_length=15)()
+    rank3_prob = models.CharField(max_length=15)
 
     rank4 = models.PositiveIntegerField()
-    rank4_prob = models.CharField(max_length=15)()
+    rank4_prob = models.CharField(max_length=15)
 
     rank5 = models.PositiveIntegerField()
-    rank5_prob = models.CharField(max_length=15)()
+    rank5_prob = models.CharField(max_length=15)
 
     rank6 = models.PositiveIntegerField()
-    rank6_prob = models.CharField(max_length=15)()
+    rank6_prob = models.CharField(max_length=15)
 
     rank7 = models.PositiveIntegerField()
-    rank7_prob = models.CharField(max_length=15)()
+    rank7_prob = models.CharField(max_length=15)
