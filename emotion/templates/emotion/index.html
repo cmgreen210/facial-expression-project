@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <form action="{% url 'emotion.views.get_video' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>{{ v_form.non_field_errors }}</p>
+        <p>{{ v_form.video_file.label_tag }} {{ v_form.video_file.help_text }}</p>
+        <p>
+            {{ v_form.video_file.errors }}
+            {{ v_form.video_file }}
+        </p>
+        <input type="submit" value="Submit"/>
+    </form>
+    <form action="{% url 'emotion.views.get_image' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>{{ i_form.non_field_errors }}</p>
+        <p>{{ i_form.image_file.label_tag }} {{ i_form.image_file.help_text }}</p>
+        <p>
+            {{ i_form.image_file.errors }}
+            {{ i_form.image_file }}
+        </p>
+        <input type="submit" value="Submit"/>
+    </form>
+</body>
+</html>

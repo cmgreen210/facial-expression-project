@@ -84,6 +84,7 @@ STATIC_URL = '/static/'
 
 CONTENT_TYPES = ['image']
 VIDEO_TYPES = ['video/quicktime']
+IMAGE_TYPES = ['image/jpeg']
 # 2.5MB - 2621440
 # 5MB - 5242880
 # 10MB - 10485760

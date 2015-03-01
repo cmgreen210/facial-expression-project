@@ -24,7 +24,7 @@ class LimitedFileField(forms.FileField):
                             'be under {0}!').format(self.max_upload_size))
                     raise forms.ValidationError(msg)
             else:
-                msg = _(('File type ({0}) is not'
+                msg = _(('Video file type ({0}) is not'
                          ' supported.').format(data.content_type))
                 raise forms.ValidationError(msg)
         except AttributeError:
@@ -33,20 +33,29 @@ class LimitedFileField(forms.FileField):
         return data
 
 
-class LimitedImageField(forms.ImageField):
+class LimitedImageField(forms.FileField):
     def __init__(self, *args, **kwargs):
         self.max_upload_size = kwargs.pop('max_upload_size', None)
+        self.content_types = kwargs.pop('content_types', None)
         if not self.max_upload_size:
             self.max_upload_size = settings.MAX_UPLOAD_SIZE
+        if not self.content_types:
+            self.content_types = set(settings.IMAGE_TYPES)
         super(LimitedImageField, self).__init__(*args, **kwargs)
 
     def clean(self, *args, **kwargs):
         data = super(LimitedImageField, self).clean(*args, **kwargs)
         try:
-            if data.size > self.max_upload_size:
-                msg = _(('File size must '
-                         'be under {0}!').format(self.max_upload_size))
+            if data.content_type in self.content_types:
+                if data.size > self.max_upload_size:
+                    msg = _(('File size must '
+                             'be under {0}!').format(self.max_upload_size))
+                    raise forms.ValidationError(msg)
+            else:
+                msg = _(('Image type ({0}) is not'
+                         ' supported.').format(data.content_type))
                 raise forms.ValidationError(msg)
+
         except AttributeError:
             pass
 
@@ -60,4 +69,6 @@ class VideoForm(forms.Form):
 
 
 class ImageForm(forms.Form):
-    image_file = LimitedImageField(label="Image")
+    image_file = LimitedImageField(label="Upload an image",
+                                   error_messages={'required':
+                                                   'Please select an image'})
