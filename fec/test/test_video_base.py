@@ -1,5 +1,6 @@
 import unittest
 from fec.media.video import VideoStreamClassifyBase
+from fec.classifier.classifier_base import DummyClassifier
 
 
 class DummyVideoStream(VideoStreamClassifyBase):
@@ -31,6 +32,9 @@ class VideoBaseTest(unittest.TestCase):
         frame_skip = 10
         v_1.frame_skip = frame_skip
         self.assertEqual(v_1.frame_skip, frame_skip)
+
+        v_1.classifier = DummyClassifier(0)
+        self.assertIsNotNone(v_1.classifier)
 
     def test_construction(self):
         self.assertRaises(ValueError, DummyVideoStream, None, -1)

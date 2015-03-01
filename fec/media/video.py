@@ -78,7 +78,7 @@ class VideoStreamClassifyBase(object):
         return self._classifier
 
     @classifier.setter
-    def set_classifier(self, classifier):
+    def classifier(self, classifier):
         self._classifier = classifier
 
     @property
