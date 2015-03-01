@@ -3,6 +3,7 @@ import cv2
 from multiprocessing.pool import ThreadPool
 import image_processing as imp
 from collections import deque
+from abc import ABCMeta, abstractmethod
 
 
 class VideoStream(object):
@@ -62,6 +63,47 @@ class VideoStream(object):
     def _setup_multithreaded(self):
         self.threadn = cv2.getNumberOfCPUs()
         self.thread_pool = ThreadPool(self.threadn)
+
+
+class VideoStreamClassifyBase(object):
+    __metaclass__ = ABCMeta
+
+    def __init__(self, classifier, frame_skip=20):
+        self._classifier = classifier
+        self._frame_skip = None
+        self.frame_skip = frame_skip
+
+    @property
+    def classifier(self):
+        return self._classifier
+
+    @classifier.setter
+    def set_classifier(self, classifier):
+        self._classifier = classifier
+
+    @property
+    def frame_skip(self):
+        return self._frame_skip
+
+    @frame_skip.setter
+    def frame_skip(self, frame_skip):
+        if frame_skip <= 0:
+            raise ValueError('Frame skip most be positive!')
+
+        self._frame_skip = frame_skip
+
+    @abstractmethod
+    def start(self):
+        pass
+
+    @abstractmethod
+    def stop(self):
+        pass
+
+    @abstractmethod
+    def clean_up(self):
+        pass
+
 
 if __name__ == '__main__':
     v = VideoStream(frame_skip=15)
