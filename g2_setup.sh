@@ -11,6 +11,10 @@ sudo apt-get install -y cuda
 sudo apt-get install python-setuptools
 sudo easy_install pip
 sudo apt-get install python
+sudo apt-get install ipython-notbook
 
 # GRAPHLAB
 sudo pip install http://static.dato.com/files/graphlab-create-1.3.gpu.tar.gz
+
+# TOOLS
+sudo apt-get install git
