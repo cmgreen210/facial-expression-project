@@ -25,3 +25,5 @@ class DummyClassifier(ClassifierBase):
         if self._n is None:
             raise StandardError('You must call fit before predict!')
         return np.random.randint(0, self._n, size=x.shape[0])
+
+ClassifierBase.register(DummyClassifier)

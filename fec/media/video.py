@@ -105,7 +105,39 @@ class VideoStreamClassifyBase(object):
         pass
 
 
+class VideoStreamFromCam(VideoStreamClassifyBase):
+    def __init__(self, classifier, frame_skip=20, source=0):
+        super(VideoStreamFromCam, self).__init__(classifier, frame_skip)
+        self._source = source
+        self._capture = None
+
+    def start(self):
+
+        self._capture = cv2.VideoCapture(self._source)
+        frame_count = 0
+        while self._capture.isOpened():
+            ret, frame = self._capture.read()
+            frame_count += 1
+
+            if self.stop():
+                break
+
+            cv2.imshow('video', frame)
+
+        self.clean_up()
+
+    def stop(self):
+        return cv2.waitKey(1) & 0xFF == ord('q')
+
+    def clean_up(self):
+        if self._capture:
+            self._capture.release()
+
+        cv.DestroyAllWindows()
+
+VideoStreamClassifyBase.register(VideoStreamFromCam)
+
+
 if __name__ == '__main__':
-    v = VideoStream(frame_skip=15)
-    v.image_processor = imp.FaceDetectorProcessor()
+    v = VideoStreamFromCam(None)
     v.start()
