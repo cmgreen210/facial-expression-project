@@ -2,6 +2,7 @@ from django.test import TestCase
 from emotion.models import validate_request_type, validate_image_csv
 from django.core.exceptions import ValidationError
 import pep8
+import os
 
 
 class ValidatorTests(TestCase):
@@ -24,18 +25,23 @@ class ValidatorTests(TestCase):
 
 
 class CodeStyleTest(TestCase):
-    def setUp(self):
-        self._file_list = ['emotion/tests.py',
-                           'emotion/forms.py',
-                           'emotion/models.py',
-                           'emotion/views.py',
-                           'emotion/urls.py']
 
     def test_pep(self):
         """Test for PEP8 conformance"""
 
+        root_dir = os.path.dirname(os.path.abspath(__file__))
+        root_dir = os.path.join(root_dir, '..')
+
+        file_list = []
+        for root, _, files in os.walk(root_dir):
+            for f in files:
+                _, ext = os.path.splitext(f)
+                if ext == '.py' and not ('migrations' in root):
+                    file_list.append(os.path.abspath(os.path.join(root, f)))
+
         pep8style = pep8.StyleGuide(quiet=False)
 
-        result = pep8style.check_files(self._file_list)
+        result = pep8style.check_files(file_list)
+
         self.assertEqual(result.total_errors, 0,
                          result.print_statistics())
