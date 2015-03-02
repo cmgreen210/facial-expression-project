@@ -9,6 +9,7 @@ sudo apt-get install -y cuda
 # PYTHON STUFF
 sudo apt-get install python-setuptools
 sudo easy_install pip
+sudo apt-get install python
 
 # GRAPHLAB
 sudo pip install http://static.dato.com/files/graphlab-create-1.3.gpu.tar.gz
