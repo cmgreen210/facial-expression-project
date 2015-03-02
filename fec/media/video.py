@@ -50,10 +50,6 @@ class VideoStream(object):
 
         self.clean_up()
 
-    def _display_image(self, name, image):
-        cv2.imshow(name, image)
-        return
-
     def clean_up(self):
         if self.capture:
             self.capture.release()
@@ -110,10 +106,11 @@ class VideoStreamClassifyBase(object):
 
 
 class CameraClassifier(VideoStreamClassifyBase):
-    def __init__(self, classifier, frame_skip=20, source=0):
+    def __init__(self, classifier, frame_skip=20, source=0, name=""):
         super(CameraClassifier, self).__init__(classifier, frame_skip)
         self._source = source
         self._capture = None
+        self._name = name
 
     def start(self):
 
@@ -126,7 +123,7 @@ class CameraClassifier(VideoStreamClassifyBase):
             if self.stop():
                 break
 
-            cv2.imshow('video', frame)
+            self._display_image(frame)
 
         self.clean_up()
 
@@ -141,6 +138,10 @@ class CameraClassifier(VideoStreamClassifyBase):
 
     def get_classifications(self):
         pass
+
+    def _display_image(self, image):
+        cv2.imshow(self._name, image)
+        return
 
 VideoStreamClassifyBase.register(CameraClassifier)
 
