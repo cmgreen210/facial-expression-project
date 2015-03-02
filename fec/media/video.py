@@ -4,61 +4,7 @@ from multiprocessing.pool import ThreadPool
 import image_processing as imp
 from collections import deque
 from abc import ABCMeta, abstractmethod
-
-
-class VideoStream(object):
-
-    def __init__(self, video_source=0, frame_skip=20):
-        self.video_source = video_source
-        self.capture = None
-        self.frame_skip = frame_skip
-
-        self.clf_proc = None
-
-        self.threadn = None
-        self.thread_pool = None
-        self._setup_multithreaded()
-
-        self.image_processor = imp.ImageProcessor()
-        self.tasks = None
-
-    def start(self):
-
-        self.capture = cv2.VideoCapture(self.video_source)
-
-        frame_count = 0
-        self.tasks = deque()
-        while self.capture.isOpened():
-
-            ret, frame = self.capture.read()
-            frame_count += 1
-            cv2.imshow('video', frame)
-
-            while len(self.tasks) > 0 and self.tasks[0].ready():
-                proc_imag = self.tasks.popleft().get()
-                #  cv2.imshow('video', proc_imag)
-
-            if len(self.tasks) < self.threadn and\
-               frame_count % self.frame_skip == 0:
-                task_func = self.image_processor.process_image
-                task = self.thread_pool.apply_async(task_func,
-                                                    (frame.copy(),))
-                self.tasks.append(task)
-
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-
-        self.clean_up()
-
-    def clean_up(self):
-        if self.capture:
-            self.capture.release()
-
-        cv.DestroyAllWindows()
-
-    def _setup_multithreaded(self):
-        self.threadn = cv2.getNumberOfCPUs()
-        self.thread_pool = ThreadPool(self.threadn)
+from collections import deque
 
 
 class VideoStreamClassifyBase(object):
@@ -70,8 +16,28 @@ class VideoStreamClassifyBase(object):
         self.frame_skip = frame_skip
         self._classifications = []
 
+        self.thread_num = None
+        self.thread_pool = None
+        self._setup_multithreaded()
+        self.tasks = deque()
+
     def get_classifications(self):
         return self._classifications
+
+    def _setup_multithreaded(self):
+        self.thread_num = cv2.getNumberOfCPUs()
+        self.thread_pool = ThreadPool(self.thread_num)
+
+    def process_frame(self, frame, frame_count):
+        while len(self.tasks) > 0 and self.tasks[0].ready():
+            self._classifications(self.tasks.popleft().get())
+
+        if len(self.tasks) < self.thread_num and\
+           frame_count % self.frame_skip == 0:
+            task_func = self._classifier
+            task = self.thread_pool.apply_async(task_func,
+                                                (frame.copy(),))
+            self.tasks.append(task)
 
     @property
     def classifier(self):
@@ -104,10 +70,6 @@ class VideoStreamClassifyBase(object):
     def clean_up(self):
         pass
 
-    @abstractmethod
-    def process_frame(self, frame):
-        pass
-
 
 class CameraClassifier(VideoStreamClassifyBase):
     def __init__(self, classifier, frame_skip=20, source=0, name=""):
@@ -129,6 +91,8 @@ class CameraClassifier(VideoStreamClassifyBase):
 
             self._display_image(frame)
 
+            self.process_frame(frame, frame_count)
+
         self.clean_up()
 
     def stop(self):
@@ -147,8 +111,6 @@ class CameraClassifier(VideoStreamClassifyBase):
         cv2.imshow(self._name, image)
         return
 
-    def process_frame(self, frame):
-        pass
 
 VideoStreamClassifyBase.register(CameraClassifier)
 

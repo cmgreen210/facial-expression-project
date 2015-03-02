@@ -17,7 +17,7 @@ class DummyVideoStream(VideoStreamClassifyBase):
     def clean_up(self):
         pass
 
-    def process_frame(self, frame):
+    def process_frame(self, frame, frame_count):
         pass
 
 
