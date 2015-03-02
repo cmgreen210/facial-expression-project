@@ -16,10 +16,12 @@ class ClassifierBase(object):
 
 class DummyClassifier(ClassifierBase):
     def __init__(self, n):
-        self._n = n
+        self._n = None
 
     def fit(self, x, y):
-        pass
+        self._n = x.shape[1]
 
     def predict(self, x):
+        if self._n is None:
+            raise StandardError('You must call fit before predict!')
         return np.random.randint(0, self._n, size=x.shape[0])
