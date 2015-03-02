@@ -104,6 +104,10 @@ class VideoStreamClassifyBase(object):
     def clean_up(self):
         pass
 
+    @abstractmethod
+    def process_frame(self, frame):
+        pass
+
 
 class CameraClassifier(VideoStreamClassifyBase):
     def __init__(self, classifier, frame_skip=20, source=0, name=""):
@@ -142,6 +146,9 @@ class CameraClassifier(VideoStreamClassifyBase):
     def _display_image(self, image):
         cv2.imshow(self._name, image)
         return
+
+    def process_frame(self, frame):
+        pass
 
 VideoStreamClassifyBase.register(CameraClassifier)
 
