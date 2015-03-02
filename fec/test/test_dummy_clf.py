@@ -10,6 +10,8 @@ class DummyClassifierTest(unittest.TestCase):
 
         size = (100, 4)
         x = np.random.random(size)
+        self.assertRaises(StandardError, dummy.predict, x)
+        dummy.fit(x, None)
         predict = dummy.predict(x)
         self.assertEqual(predict.shape[0], size[0])
         self.assertTrue(np.all(predict < n))
