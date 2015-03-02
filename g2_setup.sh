@@ -1,5 +1,6 @@
 #!/bin/sh
 sudo apt-get update
+
 # CUDA
 wget http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1204/x86_64/cuda-repo-ubuntu1204_6.5-14_amd64.deb
 sudo dpkg -i cuda-repo-ubuntu1204_6.5-14_amd64.deb
