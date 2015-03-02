@@ -17,6 +17,7 @@ class DummyVideoStream(VideoStreamClassifyBase):
     def clean_up(self):
         pass
 
+
 VideoStreamClassifyBase.register(DummyVideoStream)
 
 

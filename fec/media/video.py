@@ -72,6 +72,10 @@ class VideoStreamClassifyBase(object):
         self._classifier = classifier
         self._frame_skip = None
         self.frame_skip = frame_skip
+        self._classifications = []
+
+    def get_classifications(self):
+        return self._classifications
 
     @property
     def classifier(self):
@@ -105,9 +109,9 @@ class VideoStreamClassifyBase(object):
         pass
 
 
-class VideoStreamFromCam(VideoStreamClassifyBase):
+class CameraClassifier(VideoStreamClassifyBase):
     def __init__(self, classifier, frame_skip=20, source=0):
-        super(VideoStreamFromCam, self).__init__(classifier, frame_skip)
+        super(CameraClassifier, self).__init__(classifier, frame_skip)
         self._source = source
         self._capture = None
 
@@ -135,9 +139,12 @@ class VideoStreamFromCam(VideoStreamClassifyBase):
 
         cv.DestroyAllWindows()
 
-VideoStreamClassifyBase.register(VideoStreamFromCam)
+    def get_classifications(self):
+        pass
+
+VideoStreamClassifyBase.register(CameraClassifier)
 
 
 if __name__ == '__main__':
-    v = VideoStreamFromCam(None)
+    v = CameraClassifier(None)
     v.start()
