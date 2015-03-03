@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import time
 import os
-from fec.classifier import face_detector
+from fec.classifier.face_detector import FaceDetector
 
 
 class ImageProcessor(object):
