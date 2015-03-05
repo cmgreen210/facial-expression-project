@@ -6,6 +6,7 @@ from filechunkio import FileChunkIO
 import math
 import shutil
 import skimage.io
+import fec.media.helpers.utilities as utilities
 
 
 _conn = None
@@ -35,7 +36,7 @@ def upload_big_file(source_path, bucket):
     mp.complete_upload()
 
 
-def read_data_in_and_save(file_path, raw_dir):
+def read_data_in_and_save(file_path, raw_dir, rotate=None):
         """Read kaggle training data text file
 
         """
@@ -50,6 +51,11 @@ def read_data_in_and_save(file_path, raw_dir):
             shutil.rmtree(raw_dir)
 
         os.makedirs(raw_dir)
+
+        if rotate is not None:
+            rot_mat = [utilities.get_rotation_matrix(48, 48, r)
+                       for r in rotate]
+
         for line in f:
             s = line.split(',')
             emotion = int(s[0])
@@ -69,9 +75,36 @@ def read_data_in_and_save(file_path, raw_dir):
 
             skimage.io.imsave(image_path,
                               data_)
-
             image_paths.append(image_path)
             targets.append(emotion)
+
+            if rotate is not None:
+                cnt = 0
+                flip_image = utilities.flip_image(data_)
+                for m in rot_mat:
+                    img_rot = utilities.rotate_image(data_, m)
+                    image_path = os.path.join(raw_dir,
+                                              'im_' + str(count) +
+                                              '_' + suf + '_' + str(cnt)
+                                              + '.png')
+
+                    skimage.io.imsave(image_path, img_rot)
+
+                    image_paths.append(image_path)
+                    targets.append(emotion)
+                    cnt += 1
+
+                    img_rot = utilities.rotate_image(flip_image, m)
+                    image_path = os.path.join(raw_dir,
+                                              'im_' + str(count) +
+                                              '_' + suf + '_' + str(cnt)
+                                              + '.png')
+
+                    skimage.io.imsave(image_path, img_rot)
+
+                    image_paths.append(image_path)
+                    targets.append(emotion)
+                    cnt += 1
 
             count += 1
 
@@ -84,12 +117,38 @@ def read_data_in_and_save(file_path, raw_dir):
 
         return image_paths, target_path
 
+
+def create_sframe(img_paths, target_path):
+        gl_images = [gl.Image(img_path) for img_path in img_paths]
+        sf = gl.SFrame()
+        sf['images'] = gl_images
+        sf['label'] = np.loadtxt(target_path, dtype=int)
+
+        return sf
+
+
 if __name__ == '__main__':
-    tmp_dir, _ = os.path.split(os.path.abspath(__file__))
+    tmp_dir = os.environ['HOME']
     tmp_dir = os.path.join(tmp_dir, '.tmp/')
     if not os.path.exists(tmp_dir):
-        tmp_dir = os.mkdir(os.path.join(tmp_dir, '.tmp/'))
+        os.mkdir(tmp_dir)
 
     data_path = os.path.join(os.path.dirname(__file__), 'data/fer2013.csv')
 
-    read_data_in_and_save(data_path, tmp_dir)
+    rotations = [90, 180, 270]
+
+    img_paths, target_path = read_data_in_and_save(data_path, tmp_dir,
+                                                   rotate=rotations)
+    sf = create_sframe(img_paths, target_path)
+
+    sf.save('s3://cmgreen210-emotions/sframe-full')
+
+    #
+    # rot_mat = [get_rotation_matrix(48, 48, r) for r in rotations]
+    #
+    # for s in sf:
+    #     image = s['images']
+    #
+
+    if os.path.exists(tmp_dir):
+        shutil.rmtree(tmp_dir)
