@@ -49,7 +49,7 @@ class ResizeProcessor(ImageProcessor):
 class FaceDetectorProcessor(ImageProcessor):
 
     def __init__(self, cascade_file='haarcascade_frontalface_alt.xml',
-                 return_largest=True, scale_x=1.1, scale_y=1.1):
+                 return_largest=True, scale_x=1.1, scale_y=1.1, shape=None):
         self.detector = FaceDetector(cascade_file,
                                      return_largest=return_largest)
 
@@ -57,21 +57,21 @@ class FaceDetectorProcessor(ImageProcessor):
         self.postprocessor = ResizeProcessor()
         self.scale_x = scale_x
         self.scale_y = scale_y
+        self.shape = shape
 
     def process_image(self, image, *args):
         gray = self.preprocessor.process_image(image, *args)
 
         face = self.detector.detect_face(image)
         if len(face) == 0:
-            return image
+            return image, None
         x, y, w, h = face[0]
         w *= self.scale_x
         h *= self.scale_y
 
         gray = gray[y:y+h, x:x+w]
         gray = self.postprocessor.process_image(gray)
-        self.save_image(gray)
-        return image
+        return image, gray
 
 
 def run_face_detector(image):
