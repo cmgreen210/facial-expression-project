@@ -115,6 +115,38 @@ class CameraClassifier(VideoStreamClassifyBase):
 VideoStreamClassifyBase.register(CameraClassifier)
 
 
+class VideoFileClassifier(VideoStreamClassifyBase):
+    def __init__(self, classifier, source, frame_skip=20, name=""):
+        super(CameraClassifier, self).__init__(classifier, frame_skip)
+        self._source = source
+        self._capture = None
+        self._name = name
+
+    def start(self):
+
+        self._capture = cv2.VideoCapture(self._source)
+        frame_count = 0
+        while self._capture.isOpened():
+            ret, frame = self._capture.read()
+            frame_count += 1
+
+            self.process_frame(frame, frame_count)
+
+        self.clean_up()
+
+    def stop(self):
+        pass
+
+    def clean_up(self):
+        if self._capture:
+            self._capture.release()
+
+    def get_classifications(self):
+        pass
+
+VideoStreamClassifyBase.register(VideoFileClassifier)
+
+
 if __name__ == '__main__':
     v = CameraClassifier(None)
     v.start()
