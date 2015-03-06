@@ -44,8 +44,18 @@ class GraphLabNeuralNetTest(unittest.TestCase):
         nn.add_relu_layer()
         nn.add_sigmoid_layer()
         nn.add_tanh_layer()
+        nn.add_soft_max_layer()
 
     def test_drop_out_layer(self):
         nn = GraphLabNeuralNetBuilder()
         nn.add_dropout_layer()
         nn.add_dropout_layer(.8)
+
+    def test_get_net_bad(self):
+        nn_bad = GraphLabNeuralNetBuilder()
+        self.assertRaises(ValueError, nn_bad.get_net)  # Empty net
+
+    def test_net_params(self):
+        nn = GraphLabNeuralNetBuilder()
+        nn['momentum'] = 0.5
+        self.assertEqual(nn['momentum'], 0.5)

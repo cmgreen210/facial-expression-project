@@ -65,6 +65,15 @@ class GraphLabNeuralNetBuilder(object):
     def add_soft_plus_layer(self):
         self.layers.append(gl.deeplearning.layers.SoftplusLayer())
 
+    def add_soft_max_layer(self):
+        self.layers.append(gl.deeplearning.layers.SoftmaxLayer())
+
     def add_dropout_layer(self, threshold=0.5):
         drop_layer = gl.deeplearning.layers.DropoutLayer(threshold)
         self.layers.append(drop_layer)
+
+    def __getitem__(self, item):
+        return self.net.params[item]
+
+    def __setitem__(self, key, value):
+        self.net.params[key] = value
