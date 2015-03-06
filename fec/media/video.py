@@ -6,9 +6,11 @@ from collections import deque
 from abc import ABCMeta, abstractmethod
 from collections import deque
 from fec.media.image_processing import FaceDetectorProcessor
+from fec.classifier.gl_classifier import GraphLabClassifier
 import os
 import graphlab as gl
 import shutil
+import numpy as np
 
 
 class VideoStreamClassifyBase(object):
@@ -29,6 +31,7 @@ class VideoStreamClassifyBase(object):
 
         self.original_images = None
         self.transformed_image = None
+        self.image_paths = None
 
     def get_classifications(self):
         return self._classifications
@@ -164,19 +167,23 @@ class VideoFileClassifier(VideoStreamClassifyBase):
 
         if self.images is not None:
             count = 0
+            self.orig_to_transformed_paths = {}
             for im in self.images:
                 original_im = im[0]
                 orig_dir = os.path.join(self.tmp_dir, 'orig')
-                file_name = os.path.join(orig_dir,
-                                         'orig_' + str(count) + '.png')
-                cv2.imwrite(file_name, original_im)
+                orig_file_name = os.path.join(orig_dir,
+                                              'orig_' + str(count) + '.png')
+                cv2.imwrite(orig_file_name, original_im)
 
                 class_im = im[1]
                 class_dir = os.path.join(self.tmp_dir, 'class')
-                file_name = os.path.join(class_dir,
-                                         'class_' + str(count) + '.png')
-                cv2.imwrite(file_name, class_im)
+                class_file_name = os.path.join(class_dir,
+                                               'class_' + str(count) + '.png')
+                cv2.imwrite(class_file_name, class_im)
                 count += 1
+
+                self.orig_to_transformed_paths[orig_file_name] =\
+                    class_file_name
 
             x = gl.image_analysis.load_images(class_dir)
             x.rename({'image': 'images'})
@@ -187,14 +194,39 @@ class VideoFileClassifier(VideoStreamClassifyBase):
             self.original_images.rename({'image': 'images'})
             self.transformed_image = x
 
+            xp = self.original_images['path']
+            x_images = self.original_images['images']
+
+            original_temp = []
+            for orig_path, trans_path in vid.\
+                    orig_to_transformed_paths.iteritems():
+                t = xp == orig_path
+                orig_idx = np.where(t == 1)[0][0]
+                original_temp.append(x_images[int(orig_idx)])
+
+            sarray = gl.SArray(original_temp)
+            self.transformed_image.add_column(sarray, 'original_images')
+
+            self.transformed_image =\
+                self.transformed_image[['images', 'original_images']]
+
+            self.transformed_image =\
+                self.transformed_image.add_row_number()
+
     def get_classifications(self):
         return self._classifications
+
+    def get_final_images(self):
+        return self.transformed_image
 
 VideoStreamClassifyBase.register(VideoFileClassifier)
 
 
 if __name__ == '__main__':
-    v = VideoFileClassifier(None, '/Users/chris/face-emotion-classifier'
-                                  '/tmp_video/vid.mov')
-    v.start()
-    v.stop()
+    clf = GraphLabClassifier('/Users/chris/face-emotion-classifier'
+                             '/emotion/classifier')
+    vid = VideoFileClassifier(clf.predict_proba,
+                              '/Users/chris/face-emotion-classifier'
+                              '/tmp_video/vid.mov')
+    vid.start()
+    vid.stop()
