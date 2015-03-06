@@ -168,13 +168,13 @@ class VideoFileClassifier(VideoStreamClassifyBase):
                 original_im = im[0]
                 orig_dir = os.path.join(self.tmp_dir, 'orig')
                 file_name = os.path.join(orig_dir,
-                                     'orig_' + str(count) +  '.png')
+                                         'orig_' + str(count) + '.png')
                 cv2.imwrite(file_name, original_im)
 
                 class_im = im[1]
                 class_dir = os.path.join(self.tmp_dir, 'class')
                 file_name = os.path.join(class_dir,
-                                     'class_' + str(count) + '.png')
+                                         'class_' + str(count) + '.png')
                 cv2.imwrite(file_name, class_im)
                 count += 1
 

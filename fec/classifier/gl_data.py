@@ -152,4 +152,3 @@ if __name__ == '__main__':
 
     if os.path.exists(tmp_dir):
         shutil.rmtree(tmp_dir)
-
