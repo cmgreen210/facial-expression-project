@@ -1,6 +1,10 @@
 import numpy as np
 from PIL import Image
+<<<<<<< HEAD
 import cv2
+=======
+# import cv2
+>>>>>>> bc79861cbf0691f851d3145e1a94af6ae0cca89c
 
 
 def load_np_clf_data(path, fraction=None, seed=None):
@@ -53,6 +57,7 @@ def flip_image(image, dir='h'):
     else:
         raise ValueError('''Direction must be 'h' or 'v''''')
 
+<<<<<<< HEAD
 
 def get_rotation_matrix(cols, rows, degrees=0, scaling=1):
     m = cv2.getRotationMatrix2D((cols/2, rows/2), degrees, scaling)
@@ -61,6 +66,16 @@ def get_rotation_matrix(cols, rows, degrees=0, scaling=1):
 
 def rotate_image(image, rot_mat):
     return cv2.warpAffine(image, rot_mat, image.shape)
+=======
+#
+# def get_rotation_matrix(cols, rows, degrees=0, scaling=1):
+#     m = cv2.getRotationMatrix2D((cols/2, rows/2), degrees, scaling)
+#     return m
+#
+#
+# def rotate_image(image, rot_mat):
+#     return cv2.warpAffine(image, rot_mat, image.shape)
+>>>>>>> bc79861cbf0691f851d3145e1a94af6ae0cca89c
 
 
 if __name__ == '__main__':

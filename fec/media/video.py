@@ -187,7 +187,6 @@ class VideoFileClassifier(VideoStreamClassifyBase):
             self.original_images.rename({'image': 'images'})
             self.transformed_image = x
 
-
     def get_classifications(self):
         return self._classifications
 
