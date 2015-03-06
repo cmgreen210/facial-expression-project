@@ -198,7 +198,7 @@ class VideoFileClassifier(VideoStreamClassifyBase):
             x_images = self.original_images['images']
 
             original_temp = []
-            for orig_path, trans_path in vid.\
+            for orig_path, trans_path in self.\
                     orig_to_transformed_paths.iteritems():
                 t = xp == orig_path
                 orig_idx = np.where(t == 1)[0][0]
@@ -213,11 +213,21 @@ class VideoFileClassifier(VideoStreamClassifyBase):
             self.transformed_image =\
                 self.transformed_image.add_row_number()
 
+            shutil.rmtree(self.tmp_dir)
+
     def get_classifications(self):
         return self._classifications
 
     def get_final_images(self):
         return self.transformed_image
+
+    @property
+    def source(self):
+        return self.source
+
+    @source.setter
+    def source(self, source):
+        self.source = source
 
 VideoStreamClassifyBase.register(VideoFileClassifier)
 
