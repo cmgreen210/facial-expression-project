@@ -9,6 +9,11 @@ class GraphLabNeuralNetBuilder(object):
     def get_net(self):
         self.net.layers = self.layers
         self.net.verify()
+        return self.net
+
+    def verify(self):
+        self.net.layers = self.layers
+        return self.net.verify()
 
     def add_convolution_layer(self, kernel_size,
                               stride, num_channels, **kwargs):
