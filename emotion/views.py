@@ -41,8 +41,8 @@ def get_video(request):
 
     iform = ImageForm()
 
-    return render_to_response('emotion/index.html', {'v_form': form,
-                                                     'i_form': iform},
+    return render_to_response('emotion/media_upload.html', {'v_form': form,
+                                                            'i_form': iform},
                               context_instance=RequestContext(request))
 
 
