@@ -33,5 +33,4 @@ def run_video_classifier(video_path, frame_skip=5):
 
 
 if __name__ == '__main__':
-    print run_video_classifier('/Users/chris/face-emotion-classifier'
-                               '/tmp_video/vid.mov')
+    c, i = run_video_classifier('/Users/chris/face-emotion-classifier/tmp_video/vid.mov')
