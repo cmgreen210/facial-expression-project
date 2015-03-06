@@ -30,14 +30,9 @@ class GraphLabNeuralNetTest(unittest.TestCase):
 
     def test_full_connection_layer(self):
         nn = GraphLabNeuralNetBuilder()
+        nn.add_flatten_layer()
         nn.add_full_connection_layer(10)
-        self.assertEqual(len(nn.layers), 2)
-        self.assertEqual(nn.layers[0].name, 'flatten')
-
-        nn = GraphLabNeuralNetBuilder()
-        nn.add_avg_pooling_layer(3)
-        nn.add_full_connection_layer(10)
-        self.assertEqual(len(nn.layers), 3)
+        nn.add_full_connection_layer(100)
 
     def test_activation_layers(self):
         nn = GraphLabNeuralNetBuilder()

@@ -47,9 +47,6 @@ class GraphLabNeuralNetBuilder(object):
     def add_full_connection_layer(self, num_hidden_units,
                                   init_bias=0, init_sigma=0.01,
                                   init_random='gaussian'):
-        if len(self.layers) == 0 or self.layers[-1].name != 'flatten':
-            self.add_flatten_layer()
-
         fc_layer = gl.deeplearning.layers.FullConnectionLayer(
             num_hidden_units, init_bias=init_bias, init_sigma=init_sigma,
             init_random=init_random
