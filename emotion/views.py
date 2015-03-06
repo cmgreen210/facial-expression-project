@@ -6,7 +6,7 @@ from django.core.files.base import ContentFile
 from django.conf import settings
 import os
 from forms import VideoForm, ImageForm
-
+from emotion.pipeline import run_video_classifier
 
 def home_page(request):
     v_form = VideoForm()
@@ -25,8 +25,8 @@ def get_video(request):
             _, ext = os.path.splitext(video_file._name)
             path = default_storage.save('tmp_video/vid' + ext,
                                         ContentFile(video_file.read()))
-            # tmp_file = os.path.join(settings.MEDIA_ROOT, path)
-
+            path = os.path.join(settings.MEDIA_ROOT, path)
+            print run_video_classifier(path)
             return HttpResponseRedirect('/')
     else:
         form = VideoForm()
