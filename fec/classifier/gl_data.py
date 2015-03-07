@@ -131,8 +131,8 @@ def read_data_in_and_save(file_path, raw_dir, rotate=None):
                     img_rot = utilities.rotate_image(data_, m)
                     image_path = os.path.join(raw_dir,
                                               'im_' + str(count) +
-                                              '_' + suf + '_' + str(cnt)
-                                              + '.png')
+                                              '_' + suf + '_' + str(cnt) +
+                                              '.png')
 
                     skimage.io.imsave(image_path, img_rot)
 
@@ -141,10 +141,9 @@ def read_data_in_and_save(file_path, raw_dir, rotate=None):
                     cnt += 1
 
                     img_rot = utilities.rotate_image(flip_image, m)
-                    image_path = os.path.join(raw_dir,
-                                              'im_' + str(count) +
-                                              '_' + suf + '_' + str(cnt)
-                                              + '.png')
+                    image_path = os.path.join(raw_dir, 'im_' + str(count) +
+                                              '_' + suf + '_' + str(cnt) +
+                                              '.png')
 
                     skimage.io.imsave(image_path, img_rot)
 

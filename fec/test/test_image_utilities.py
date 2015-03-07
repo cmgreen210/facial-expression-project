@@ -2,7 +2,7 @@ from fec.media.helpers.utilities import *
 import os
 import nose.tools as no
 import numpy.testing as nptest
-import unittest.test
+import unittest
 
 
 class TestUtilities(unittest.TestCase):
