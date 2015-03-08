@@ -45,8 +45,8 @@ if __name__ == '__main__':
 
     fer_data = '/Users/chris/Downloads/fer2013/fer2013.csv'
     df = _load_original_data_into_df(fer_data)
-    df.to_pickle('/Users/chris/tmp/fer_data.pkl')
+    df.to_csv('/Users/chris/tmp/fer_processed.csv')
     con = get_connection()
     bucket = con.get_bucket('cmgreen210-emotions')
-    upload_big_file('/Users/chris/tmp/fer_data.pkl',
+    upload_big_file('/Users/chris/tmp/fer_processed.csv',
                     bucket)
