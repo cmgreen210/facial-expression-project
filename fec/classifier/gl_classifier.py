@@ -2,6 +2,7 @@ from classifier_base import ClassifierBase
 import os
 import graphlab as gl
 import numpy as np
+from math import floor
 
 
 class GraphLabClassifierFromFile(ClassifierBase):
@@ -23,7 +24,7 @@ class GraphLabClassifierFromFile(ClassifierBase):
 
 
 class GraphLabClassifierFromNetBuilder(ClassifierBase):
-    def __init__(self, net_builder, h=48, w=48, depth=1,
+    def __init__(self, net_builder, train_frac=.8, h=48, w=48, depth=1,
                  target='label', feat_name='images',
                  max_iterations=50, verbose=True, chkpt_dir=''):
         self._net_builder = net_builder
@@ -43,6 +44,7 @@ class GraphLabClassifierFromNetBuilder(ClassifierBase):
         self._max_iterations = max_iterations,
         self._verbose = verbose
         self._chkpt_dir = chkpt_dir
+        self._train_frac = .8
 
     def _create_images(self, x):
         sarray = gl.SArray(x)
@@ -70,21 +72,33 @@ class GraphLabClassifierFromNetBuilder(ClassifierBase):
                         self._target: y})
         return sf
 
+    def _split(self, x, y):
+        n_examples = x.shape[0]
+        idx = np.random.permutations(n_examples)
+        n_test = floor(self._train_frac * n_examples)
+
+        return (x[idx[:n_test], :], y[idx[:n_test]],
+                x[idx[n_test:], :], y[idx[n_test:]])
+
     def fit(self, x, y, **kwargs):
+        x_train, y_train, x_valid, y_valid = self._split(x, y)
+        self._feat_means = np.mean(x_train, axis=0)
+        self._feat_std = np.std(x_train, axis=0)
 
-        self._feat_means = np.mean(x, axis=0)
-        self._feat_std = np.std(x, axis=0)
+        x_train = self._scale_features(x_train)
+        x_valid = self._scale_features(x_valid)
 
-        x = self._scale_features(x)
-        dataset = self._assemble_full_dataset(x, y)
+        train_set = self._assemble_full_dataset(x_train, y_train)
+        valid_set = self._assemble_full_dataset(x_valid, y_valid)
 
         # Time to train the model
         self._model = gl.neuralnet_classifier.create(
-            dataset,
+            train_set,
             target=self._target,
             max_iterations=self._max_iterations,
             model_checkpoint_path=self._chkpt_dir,
             verbose=self._verbose,
+            validation_set=valid_set,
             **kwargs
         )
 
