@@ -19,6 +19,12 @@ def get_classifier():
 
 
 def run_video_classifier(video_path, frame_skip=5):
+    """
+
+    :param video_path:
+    :param frame_skip:
+    :return: sframe with cols: (row_id, class, score)
+    """
     model = get_classifier()
 
     video = VideoFileClassifier(model.predict_proba, video_path,

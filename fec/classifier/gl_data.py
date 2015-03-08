@@ -1,5 +1,5 @@
 import numpy as np
-#import graphlab as gl
+import graphlab as gl
 from boto.s3.connection import S3Connection
 import os
 from filechunkio import FileChunkIO
@@ -45,131 +45,85 @@ def _load_original_data_into_df(file_path):
     return df
 
 
-def read_data_in_and_save_df(file_path, raw_dir):
-
-    f = open(file_path)
-    f.readline()  # Ignore first
-
-    count = 0
-    if os.path.exists(raw_dir):
-        shutil.rmtree(raw_dir)
-
-    os.makedirs(raw_dir)
-
-    csv_out = os.path.join(raw_dir, 'images.csv')
-    f_img = open(csv_out, 'w')
-
-    targets = []
-    for line in f:
-        s = line.split(',')
-        emotion = int(s[0])
-        targets.append(emotion)
-
-        suf = ''
-        if len(s) > 2:
-            suf = str(s[2]).lower().strip()
-
-        s = s[1].replace('"', '').replace(' ', ',')
-        s += '\n'
-        f_img.write(s)
-
-    f_img.close()
-
-    target_path = os.path.join(raw_dir, 'target.txt')
-    f = open(target_path, 'w')
-
-    for t in targets:
-        print >> f, t
-    f.close()
-
-def read_data_in_and_save(file_path, raw_dir, rotate=None):
-        """Read kaggle training data text file
-
-        """
-        image_paths = []
-        targets = []
-
-        f = open(file_path)
-        f.readline()  # Ignore first
-
-        count = 0
-        if os.path.exists(raw_dir):
-            shutil.rmtree(raw_dir)
-
-        os.makedirs(raw_dir)
-
-        if rotate is not None:
-            rot_mat = [utilities.get_rotation_matrix(48, 48, r)
-                       for r in rotate]
-
-        for line in f:
-            s = line.split(',')
-            emotion = int(s[0])
-
-            suf = ''
-            if len(s) > 2:
-                suf = str(s[2]).lower().strip()
-
-            s = s[1].replace('"', '').split()
-
-            data_ = np.array(s, dtype=int).reshape(48, 48)
-            data_ = data_.astype('uint8')
-
-            image_path = os.path.join(raw_dir,
-                                      'im_' + str(count) +
-                                      '_' + suf + '.png')
-
-            skimage.io.imsave(image_path,
-                              data_)
-            image_paths.append(image_path)
-            targets.append(emotion)
-
-            if rotate is not None:
-                cnt = 0
-                flip_image = utilities.flip_image(data_)
-                for m in rot_mat:
-                    img_rot = utilities.rotate_image(data_, m)
-                    image_path = os.path.join(raw_dir,
-                                              'im_' + str(count) +
-                                              '_' + suf + '_' + str(cnt) +
-                                              '.png')
-
-                    skimage.io.imsave(image_path, img_rot)
-
-                    image_paths.append(image_path)
-                    targets.append(emotion)
-                    cnt += 1
-
-                    img_rot = utilities.rotate_image(flip_image, m)
-                    image_path = os.path.join(raw_dir, 'im_' + str(count) +
-                                              '_' + suf + '_' + str(cnt) +
-                                              '.png')
-
-                    skimage.io.imsave(image_path, img_rot)
-
-                    image_paths.append(image_path)
-                    targets.append(emotion)
-                    cnt += 1
-
-            count += 1
-
-        target_path = os.path.join(raw_dir, 'target.txt')
-        f = open(target_path, 'w')
-
-        for t in targets:
-            print >> f, t
-        f.close()
-
-        return image_paths, target_path
-
-
-def create_sframe(img_paths, target_path):
-        gl_images = [gl.Image(img_path) for img_path in img_paths]
-        sf = gl.SFrame()
-        sf['images'] = gl_images
-        sf['label'] = np.loadtxt(target_path, dtype=int)
-
-        return sf
+# def read_data_in_and_save(file_path, raw_dir, rotate=None):
+#         """Read kaggle training data text file
+#
+#         """
+#         image_paths = []
+#         targets = []
+#
+#         f = open(file_path)
+#         f.readline()  # Ignore first
+#
+#         count = 0
+#         if os.path.exists(raw_dir):
+#             shutil.rmtree(raw_dir)
+#
+#         os.makedirs(raw_dir)
+#
+#         if rotate is not None:
+#             rot_mat = [utilities.get_rotation_matrix(48, 48, r)
+#                        for r in rotate]
+#
+#         for line in f:
+#             s = line.split(',')
+#             emotion = int(s[0])
+#
+#             suf = ''
+#             if len(s) > 2:
+#                 suf = str(s[2]).lower().strip()
+#
+#             s = s[1].replace('"', '').split()
+#
+#             data_ = np.array(s, dtype=int).reshape(48, 48)
+#             data_ = data_.astype('uint8')
+#
+#             image_path = os.path.join(raw_dir,
+#                                       'im_' + str(count) +
+#                                       '_' + suf + '.png')
+#
+#             skimage.io.imsave(image_path,
+#                               data_)
+#             image_paths.append(image_path)
+#             targets.append(emotion)
+#
+#             if rotate is not None:
+#                 cnt = 0
+#                 flip_image = utilities.flip_image(data_)
+#                 for m in rot_mat:
+#                     img_rot = utilities.rotate_image(data_, m)
+#                     image_path = os.path.join(raw_dir,
+#                                               'im_' + str(count) +
+#                                               '_' + suf + '_' + str(cnt) +
+#                                               '.png')
+#
+#                     skimage.io.imsave(image_path, img_rot)
+#
+#                     image_paths.append(image_path)
+#                     targets.append(emotion)
+#                     cnt += 1
+#
+#                     img_rot = utilities.rotate_image(flip_image, m)
+#                     image_path = os.path.join(raw_dir, 'im_' + str(count) +
+#                                               '_' + suf + '_' + str(cnt) +
+#                                               '.png')
+#
+#                     skimage.io.imsave(image_path, img_rot)
+#
+#                     image_paths.append(image_path)
+#                     targets.append(emotion)
+#                     cnt += 1
+#
+#             count += 1
+#
+#         target_path = os.path.join(raw_dir, 'target.txt')
+#         f = open(target_path, 'w')
+#
+#         for t in targets:
+#             print >> f, t
+#         f.close()
+#
+#         return image_paths, target_path
 
 
 if __name__ == '__main__':
@@ -197,5 +151,9 @@ if __name__ == '__main__':
     #
     # if os.path.exists(tmp_dir):
     #     shutil.rmtree(tmp_dir)
-    read_data_in_and_save_csv('/Users/chris/Downloads/fer2013/fer2013.csv',
-                              '/Users/chris/tmp/raw/')
+    # # read_data_in_and_save_csv('/Users/chris/Downloads/fer2013/fer2013.csv',
+    # #                           '/Users/chris/tmp/raw/')
+    fer_data = '/Users/chris/Downloads/fer2013/fer2013.csv'
+    df = _load_original_data_into_df(fer_data)
+    sf = gl.SFrame(df)
+    sf.save('s3://cmgreen210-emotions/sframe_3col_35k')

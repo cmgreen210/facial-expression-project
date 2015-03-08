@@ -17,6 +17,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('timestamp', models.DateTimeField(auto_now=True)),
                 ('type', models.PositiveIntegerField(help_text=b'0 for video, 1 for image,                                                 any other undefined', validators=[emotion.models.validate_request_type])),
+                ('rand_string', models.CharField(max_length=10)),
             ],
             options={
             },
@@ -26,7 +27,9 @@ class Migration(migrations.Migration):
             name='ImageClassification',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('image', models.TextField(validators=[emotion.models.validate_image_csv])),
+                ('gray_image', models.ImageField(upload_to=emotion.models.gray_scale_file)),
+                ('image', models.ImageField(upload_to=emotion.models.original_image_file)),
+                ('image_rank', models.IntegerField()),
                 ('rank1', models.PositiveIntegerField()),
                 ('rank1_prob', models.FloatField(default=0.0)),
                 ('rank2', models.PositiveIntegerField()),

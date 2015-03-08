@@ -8,7 +8,7 @@ import os
 from forms import VideoForm, ImageForm
 from emotion.pipeline import run_video_classifier
 from PIL import Image
-
+from emotion.models import add_video_image_models
 
 def home_page(request):
     v_form = VideoForm()
@@ -29,13 +29,13 @@ def get_video(request):
                                         ContentFile(video_file.read()))
             path = os.path.join(settings.MEDIA_ROOT, path)
             classifications, images = run_video_classifier(path)
-
-            im = images['original_images'][0]
-            im = Image.fromarray(im.pixel_data)
-            response = HttpResponse()
-            response['Content-Type'] = 'image/png'
-            im.save(response, 'PNG')
-            return response
+            add_video_image_models(classifications, images)
+            # im = images['original_images'][0]
+            # im = Image.fromarray(im.pixel_data)
+            # response = HttpResponse()
+            # response['Content-Type'] = 'image/png'
+            # im.save(response, 'PNG')
+            return HttpResponse('Hello World!')
     else:
         form = VideoForm()
 
