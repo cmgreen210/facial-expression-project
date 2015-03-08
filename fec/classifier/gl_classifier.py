@@ -41,7 +41,7 @@ class GraphLabClassifierFromNetBuilder(ClassifierBase):
         self._feat_name = feat_name
 
         # Fit parameters
-        self._max_iterations = max_iterations,
+        self._max_iterations = max_iterations
         self._verbose = verbose
         self._chkpt_dir = chkpt_dir
         self._train_frac = train_frac
@@ -99,8 +99,7 @@ class GraphLabClassifierFromNetBuilder(ClassifierBase):
             max_iterations=self._max_iterations,
             model_checkpoint_path=self._chkpt_dir,
             verbose=self._verbose,
-            validation_set=valid_set,
-            **kwargs
+            validation_set=valid_set
         )
 
         return
