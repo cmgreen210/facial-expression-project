@@ -168,6 +168,7 @@ class VideoFileClassifier(VideoStreamClassifyBase):
         if self.images is not None:
             count = 0
             self.orig_to_transformed_paths = {}
+            # TODO: Make this simpler using SArray pixel_array_to_image
             for im in self.images:
                 original_im = im[0]
                 orig_dir = os.path.join(self.tmp_dir, 'orig')

@@ -5,8 +5,9 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.conf import settings
 import os
+from os.path import join as pjoin
 from forms import VideoForm, ImageForm
-from emotion.pipeline import run_video_classifier
+from emotion.pipeline import run_video_classifier#, run_image_classifer
 from PIL import Image
 from emotion.models import add_video_image_models
 
@@ -27,14 +28,11 @@ def get_video(request):
             _, ext = os.path.splitext(video_file._name)
             path = default_storage.save('tmp_video/vid' + ext,
                                         ContentFile(video_file.read()))
-            path = os.path.join(settings.MEDIA_ROOT, path)
+            path = pjoin(settings.MEDIA_ROOT, path)
             classifications, images = run_video_classifier(path)
-            add_video_image_models(classifications, images)
-            # im = images['original_images'][0]
-            # im = Image.fromarray(im.pixel_data)
-            # response = HttpResponse()
-            # response['Content-Type'] = 'image/png'
-            # im.save(response, 'PNG')
+            clf_info, image_info = \
+                add_video_image_models(classifications, images)
+
             return HttpResponse('Hello World!')
     else:
         form = VideoForm()
@@ -52,11 +50,11 @@ def get_image(request):
         form = ImageForm(request.POST, request.FILES)
         if form.is_valid():
             image_file = request.FILES['image_file']
-            _, ext = os.path.splitext(image_file._name)
+            _, ext = os.path.splitext(image_file. _name)
             path = default_storage.save('tmp_img/img' + ext,
                                         ContentFile(image_file.read()))
-            # tmp_file = os.path.join(settings.MEDIA_ROOT, path)
-
+            path = pjoin(settings.MEDIA_ROOT, path)
+            #clf_info, image_info = run_image_classifier(path)
             return HttpResponseRedirect('/')
     else:
         form = ImageForm()

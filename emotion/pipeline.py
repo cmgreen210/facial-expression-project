@@ -38,6 +38,27 @@ def run_video_classifier(video_path, frame_skip=5):
     return classifications, images
 
 
+def run_image_classifier(image_path):
+    """
+
+    :param video_path:
+    :param frame_skip:
+    :return: sframe with cols: (row_id, class, score)
+    """
+    model = get_classifier()
+
+    pass
+    # video = VideoFileClassifier(model.predict_proba, video_path,
+    #                             frame_skip=frame_skip)
+    # video.start()
+    # video.stop()
+    #
+    # images = video.get_final_images()
+    # classifications = video.get_classifications()
+    #
+    # return classifications, images
+
+
 if __name__ == '__main__':
     path = '/Users/chris/face-emotion-classifier/'
     path += 'tmp_video/vid.mov'
