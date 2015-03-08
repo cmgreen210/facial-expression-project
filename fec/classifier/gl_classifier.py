@@ -94,6 +94,7 @@ class GraphLabClassifierFromNetBuilder(ClassifierBase):
         # Time to train the model
         self._model = gl.neuralnet_classifier.create(
             train_set,
+            network=self._net_builder.get_net(),
             target=self._target,
             max_iterations=self._max_iterations,
             model_checkpoint_path=self._chkpt_dir,
