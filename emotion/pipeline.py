@@ -55,8 +55,8 @@ def run_image_classifier(image_path):
 
     image_classifier = get_image_classifier()
 
-    orig, gray, proba = image_classifier(image_path)
-    return orig, gray, proba
+    out = image_classifier(image_path)
+    return out
 
 
 if __name__ == '__main__':

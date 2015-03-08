@@ -7,8 +7,7 @@ from django.conf import settings
 import os
 from os.path import join as pjoin
 from forms import VideoForm, ImageForm
-from emotion.pipeline import run_video_classifier
-from PIL import Image
+from emotion.pipeline import run_video_classifier, run_image_classifier
 from emotion.models import add_video_image_models
 
 
@@ -55,7 +54,11 @@ def get_image(request):
             path = default_storage.save('tmp_img/img' + ext,
                                         ContentFile(image_file.read()))
             path = pjoin(settings.MEDIA_ROOT, path)
-            #  clf_info, image_info = run_image_classifier(path)
+            out = run_image_classifier(path)
+            if out is None:
+                # TODO: No face found so alert the user
+                pass
+            image, gray_image, class_proba = out
             return HttpResponseRedirect('/')
     else:
         form = ImageForm()
