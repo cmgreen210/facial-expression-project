@@ -95,9 +95,9 @@ def _save_img_helper(img_field, image, format='png'):
 
 
 def add_video_image_models(predictions, images, max_image=6):
-    c = ClassificationRequest(rand_string=create_rand_string(),
-                              type=0)
-    c.save()
+    clf_request = ClassificationRequest(rand_string=create_rand_string(),
+                                        type=0)
+    clf_request.save()
 
     best_predictions = predictions.sort(sort_columns='score', ascending=False)
     image_dict = {}
@@ -117,13 +117,14 @@ def add_video_image_models(predictions, images, max_image=6):
         rank += 1
         count += 1
 
+    image_classifiers = []
     for img, rank in image_dict.iteritems():
         sf = best_predictions.filter_by(img, column_name='row_id')
 
         classes = sf['class']
         prob = sf['score']
         ic = ImageClassification(
-            request=c,
+            request=clf_request,
             image_rank=rank,
             rank1=classes[0],
             rank2=classes[1],
@@ -149,3 +150,6 @@ def add_video_image_models(predictions, images, max_image=6):
         _save_img_helper(ic.gray_image, gray_image)
 
         ic.save()
+
+        image_classifiers.append(ic)
+    return clf_request, image_classifiers
