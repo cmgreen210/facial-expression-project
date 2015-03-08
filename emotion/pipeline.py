@@ -1,4 +1,4 @@
-from fec.classifier.gl_classifier import GraphLabClassifier
+from fec.classifier.gl_classifier import GraphLabClassifierFromFile
 from fec.media.video import VideoFileClassifier
 from fec.media.image import ImageFileClassifier
 import os
@@ -16,7 +16,7 @@ def get_classifier():
     if _model is None:
         this_dir, _ = os.path.split(os.path.abspath(__file__))
         p = os.path.join(this_dir, 'classifier')
-        _model = GraphLabClassifier(p)
+        _model = GraphLabClassifierFromFile(p)
 
     return _model
 

@@ -6,7 +6,7 @@ from collections import deque
 from abc import ABCMeta, abstractmethod
 from collections import deque
 from fec.media.image_processing import FaceDetectorProcessor
-from fec.classifier.gl_classifier import GraphLabClassifier
+from fec.classifier.gl_classifier import GraphLabClassifierFromFile
 import os
 import graphlab as gl
 import shutil
@@ -234,8 +234,8 @@ VideoStreamClassifyBase.register(VideoFileClassifier)
 
 
 if __name__ == '__main__':
-    clf = GraphLabClassifier('/Users/chris/face-emotion-classifier'
-                             '/emotion/classifier')
+    clf = GraphLabClassifierFromFile('/Users/chris/face-emotion-classifier'
+                                     '/emotion/classifier')
     vid = VideoFileClassifier(clf.predict_proba,
                               '/Users/chris/face-emotion-classifier'
                               '/tmp_video/vid.mov')

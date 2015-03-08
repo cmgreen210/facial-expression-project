@@ -1,5 +1,5 @@
 import unittest
-from fec.classifier.gl_classifier import GraphLabClassifier
+from fec.classifier.gl_classifier import GraphLabClassifierFromFile
 import numpy as np
 import os
 import graphlab as gl
@@ -12,7 +12,7 @@ class GraphlabClassifierTest(unittest.TestCase):
         this_dir = os.path.abspath(this_dir)
         model_path = os.path.join(this_dir, 'data', 'gl_mdl')
 
-        model = GraphLabClassifier(model_path)
+        model = GraphLabClassifierFromFile(model_path)
         self.assertEqual(model._model.name(),
                          'NeuralNetClassifier')
 
