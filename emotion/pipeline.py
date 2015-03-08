@@ -55,7 +55,7 @@ def run_image_classifier(image_path):
 
     image_classifier = get_image_classifier()
 
-    out = image_classifier(image_path)
+    out = image_classifier.classify(image_path)
     return out
 
 

@@ -153,3 +153,40 @@ def add_video_image_models(predictions, images, max_image=6):
 
         image_classifiers.append(ic)
     return clf_request, image_classifiers
+
+
+def add_image_models(predictions, original, scaled):
+    clf_request = ClassificationRequest(rand_string=create_rand_string(),
+                                        type=1)
+    clf_request.save()
+
+    best_predictions = predictions.sort(sort_columns='score',
+                                        ascending=False)
+    classes = best_predictions['class']
+    prob = best_predictions['score']
+    ic = ImageClassification(
+        request=clf_request,
+        image_rank=1,
+        rank1=classes[0],
+        rank2=classes[1],
+        rank3=classes[2],
+        rank4=classes[3],
+        rank5=classes[4],
+        rank6=classes[5],
+        rank7=classes[6],
+        rank1_prob=prob[0],
+        rank2_prob=prob[1],
+        rank3_prob=prob[2],
+        rank4_prob=prob[3],
+        rank5_prob=prob[4],
+        rank6_prob=prob[5],
+        rank7_prob=prob[6]
+    )
+
+    _save_img_helper(ic.image, Image.fromarray(original.pixel_data))
+    _save_img_helper(ic.gray_image,
+                     Image.fromarray(scaled.pixel_data))
+
+    ic.save()
+
+    return clf_request, ic

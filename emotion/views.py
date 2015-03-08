@@ -8,7 +8,7 @@ import os
 from os.path import join as pjoin
 from forms import VideoForm, ImageForm
 from emotion.pipeline import run_video_classifier, run_image_classifier
-from emotion.models import add_video_image_models
+from emotion.models import add_video_image_models, add_image_models
 
 
 def home_page(request):
@@ -59,6 +59,9 @@ def get_image(request):
                 # TODO: No face found so alert the user
                 pass
             image, gray_image, class_proba = out
+            clf_request, image_clf_info = add_image_models(class_proba,
+                                                           image,
+                                                           gray_image)
             return HttpResponseRedirect('/')
     else:
         form = ImageForm()
