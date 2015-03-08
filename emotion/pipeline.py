@@ -1,10 +1,13 @@
 from fec.classifier.gl_classifier import GraphLabClassifier
 from fec.media.video import VideoFileClassifier
+from fec.media.image import ImageFileClassifier
 import os
 
 
 _model = None
 _model_path = 'model'
+
+_image_clf = None
 
 
 def get_classifier():
@@ -16,6 +19,16 @@ def get_classifier():
         _model = GraphLabClassifier(p)
 
     return _model
+
+
+def get_image_classifier():
+    global _image_clf
+
+    if _image_clf is None:
+        clf = get_classifier()
+        _image_clf = ImageFileClassifier(clf.predict_proba)
+
+    return _image_clf
 
 
 def run_video_classifier(video_path, frame_skip=5):
@@ -39,24 +52,11 @@ def run_video_classifier(video_path, frame_skip=5):
 
 
 def run_image_classifier(image_path):
-    """
 
-    :param video_path:
-    :param frame_skip:
-    :return: sframe with cols: (row_id, class, score)
-    """
-    model = get_classifier()
+    image_classifier = get_image_classifier()
 
-    pass
-    # video = VideoFileClassifier(model.predict_proba, video_path,
-    #                             frame_skip=frame_skip)
-    # video.start()
-    # video.stop()
-    #
-    # images = video.get_final_images()
-    # classifications = video.get_classifications()
-    #
-    # return classifications, images
+    orig, gray, proba = image_classifier(image_path)
+    return orig, gray, proba
 
 
 if __name__ == '__main__':

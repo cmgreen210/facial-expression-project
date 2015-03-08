@@ -2,7 +2,7 @@ from fec.media.image_processing import FaceDetectorProcessor
 import graphlab as gl
 
 
-class ImageFileClassify(object):
+class ImageFileClassifier(object):
 
     def __init__(self, classifier, image_processor=FaceDetectorProcessor()):
         self._classifier = classifier
