@@ -4,7 +4,8 @@ import os
 import string
 import random
 from PIL import Image
-from django.conf import settings
+from cStringIO import StringIO
+from django.core.files.base import ContentFile
 
 
 def validate_request_type(value):
@@ -86,6 +87,13 @@ class ImageClassification(models.Model):
     rank7_prob = models.FloatField(default=0.0)
 
 
+def _save_img_helper(img_field, image, format='png'):
+    f = StringIO()
+    image.save(f, format)
+    s = f.getvalue()
+    img_field.save('', ContentFile(s), True)
+
+
 def add_video_image_models(predictions, images, max_image=6):
     c = ClassificationRequest(rand_string=create_rand_string(),
                               type=0)
@@ -112,18 +120,10 @@ def add_video_image_models(predictions, images, max_image=6):
     for img, rank in image_dict.iteritems():
         sf = best_predictions.filter_by(img, column_name='row_id')
 
-        image_data = images[img]
-        image = Image.fromarray(image_data['original_images'].pixel_data)
-        gray_image = Image.fromarray(image_data['images'].pixel_data)
-
-        image.show()
-
         classes = sf['class']
         prob = sf['score']
         ic = ImageClassification(
             request=c,
-            gray_image=gray_image,
-            image=image,
             image_rank=rank,
             rank1=classes[0],
             rank2=classes[1],
@@ -131,14 +131,21 @@ def add_video_image_models(predictions, images, max_image=6):
             rank4=classes[3],
             rank5=classes[4],
             rank6=classes[5],
+            rank7=classes[6],
             rank1_prob=prob[0],
             rank2_prob=prob[1],
             rank3_prob=prob[2],
             rank4_prob=prob[3],
             rank5_prob=prob[4],
             rank6_prob=prob[5],
+            rank7_prob=prob[6]
         )
-        ic.image.save()
-        print original_image_file(ic, None)
-        print gray_scale_file(ic, None)
+
+        image_data = images[img]
+        image = Image.fromarray(image_data['original_images'].pixel_data)
+        gray_image = Image.fromarray(image_data['images'].pixel_data)
+
+        _save_img_helper(ic.image, image)
+        _save_img_helper(ic.gray_image, gray_image)
+
         ic.save()
