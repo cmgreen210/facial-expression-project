@@ -44,7 +44,7 @@ class GraphLabClassifierFromNetBuilder(ClassifierBase):
         self._max_iterations = max_iterations,
         self._verbose = verbose
         self._chkpt_dir = chkpt_dir
-        self._train_frac = .8
+        self._train_frac = train_frac
 
     def _create_images(self, x):
         sarray = gl.SArray(x)
