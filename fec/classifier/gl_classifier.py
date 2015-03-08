@@ -74,7 +74,7 @@ class GraphLabClassifierFromNetBuilder(ClassifierBase):
 
     def _split(self, x, y):
         n_examples = x.shape[0]
-        idx = np.random.permutations(n_examples)
+        idx = np.random.permutation(n_examples)
         n_test = floor(self._train_frac * n_examples)
 
         return (x[idx[:n_test], :], y[idx[:n_test]],
