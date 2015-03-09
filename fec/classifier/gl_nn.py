@@ -93,5 +93,8 @@ class GraphLabNeuralNetBuilder(object):
                     if type == 'f':
                         value = float(value)
                     if type == 'b':
-                        value = bool(value)
+                        if value.lower() == 'false':
+                            value = False
+                        else:
+                            value = True
                     self.net.params[key] = value

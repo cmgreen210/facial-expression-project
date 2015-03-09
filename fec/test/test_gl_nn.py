@@ -65,3 +65,5 @@ class GraphLabNeuralNetTest(unittest.TestCase):
         self.assertEqual(net['learning_rate'], 0.1)
         self.assertEqual(net['batch_size'], 256)
         self.assertEqual(net['learning_rate_schedule'], 'constant')
+        self.assertEqual(net['subtract_mean'], False)
+        print net.net
