@@ -101,13 +101,7 @@ class GraphLabClassifierFromNetBuilder(ClassifierBase):
             verbose=self._verbose,
             validation_set=valid_set,
             metric=['accuracy',
-                    'recall@1',
                     'recall@2',
-                    'recall@3',
-                    'recall@4',
-                    'recall@5',
-                    'recall@6',
-                    'recall@7'
                     ]
         )
 
