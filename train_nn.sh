@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 RUN_NAME = $1
 MAX_IT = $2
