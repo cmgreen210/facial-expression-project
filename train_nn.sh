@@ -13,5 +13,5 @@ DATA="/home/ec2-user/data/fer_data.pkl"
 OUTPUT="${CHK_DIR}/output.txt"
 
 ${PY} train_cnn.py \
-    "${PARAMS}" "${CHK_DIR}" "${DATA}" "${MAX_IT}"\
+    "${PARAMS}" "${CHK_DIR}/check_point" "${DATA}" "${MAX_IT}"\
 > "${OUTPUT}"
