@@ -2,6 +2,7 @@
 
 RUN_NAME=$1
 MAX_IT=$2
+MODEL=$3
 
 PY='/usr/local/bin/python2.7'
 
@@ -13,5 +14,5 @@ DATA="/home/ec2-user/data/fer_data.pkl"
 OUTPUT="${CHK_DIR}/output.txt"
 
 ${PY} train_cnn.py \
-    "${PARAMS}" "${CHK_DIR}/check_point" "${DATA}" "${MAX_IT}"\
+    "${PARAMS}" "${CHK_DIR}/check_point" "${DATA}" "${MAX_IT}" "${MODEL}"\
 > "${OUTPUT}"
