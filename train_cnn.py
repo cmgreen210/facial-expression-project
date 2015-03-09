@@ -87,7 +87,7 @@ if __name__ == '__main__':
     x = np.array(df['pixels'].tolist())
     y = np.array(df['emotion'].values)
 
-    xtrain, ytrain, xtest, ytest = train_test_split(x, y, .9)
+    xtrain, ytrain, xtest, ytest = train_test_split(x, y, train_size=.9)
 
     model = GraphLabClassifierFromNetBuilder(net, chkpt_dir=check_point_path,
                                              max_iterations=max_iterations,
