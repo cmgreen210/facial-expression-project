@@ -1,15 +1,20 @@
 import graphlab as gl
 from fec.classifier.gl_nn import GraphLabNeuralNetBuilder
+from fec.classifier.gl_classifier import GraphLabClassifierFromNetBuilder
+import pandas as pd
+import numpy as np
+
 
 # Create network builder and set network parameters
 net = GraphLabNeuralNetBuilder()
 net['learning_rate'] = 0.05
-net['momentum'] = 0.9
-net['subtract_mean'] = True
+net['momentum'] = 0.7
 net['divideby'] = 255
-net['random_mirror'] = True
 net['learning_rate_schedule'] = 'polynomial_decay'
 net['batch_size'] = 256
+net['learning_rate_alpha'] = 1
+net['learning_rate_gamma'] = 5e-5
+
 
 #-------1st Convolution Layer---------
 stride = 1
@@ -80,28 +85,25 @@ net.add_soft_max_layer()
 
 
 check_point_path = "/home/ec2-user/chkpts/cv/{0}"
-data_frame_path = "/home/ec2-user/data/graphlab-35k/"
 
-data = gl.load_sframe(data_frame_path)
+df = pd.read_pickle('/home/ec2-user/data/fer_data.pkl')
+x = np.array(df['pixels'].tolist())
+y = np.array(df['emotion'].values)
 
-cv = 5
-
-max_iterations = 200
-target = 'label'
-network = net.get_net()
-verbose = True
-
-training_data, test_data = data.random_split(.8)
-
-for i in xrange(5):
-    check_point = check_point_path.format(i+1)
-    train, _ = training_data.random_split(.8)
-    model = gl.neuralnet_classifier.create(
-        train,
-        target=target,
-        max_iterations=max_iterations,
-        network=network,
-        model_checkpoint_path=check_point,
-        validation_set=test_data,
-        verbose=True
-    )
+model = GraphLabClassifierFromNetBuilder(net, chkpt_dir=check_point_path,
+                                         max_iterations=20000, train_frac=.9)
+model.fit(x, y)
+# cv = 1
+#
+# for i in xrange(5):
+#     check_point = check_point_path.format(i+1)
+#     train, _ = training_data.random_split(.8)
+#     model = gl.neuralnet_classifier.create(
+#         train,
+#         target=target,
+#         max_iterations=max_iterations,
+#         network=network,
+#         model_checkpoint_path=check_point,
+#         validation_set=test_data,
+#         verbose=True
+#     )

@@ -99,7 +99,16 @@ class GraphLabClassifierFromNetBuilder(ClassifierBase):
             max_iterations=self._max_iterations,
             model_checkpoint_path=self._chkpt_dir,
             verbose=self._verbose,
-            validation_set=valid_set
+            validation_set=valid_set,
+            metric=['accuracy',
+                    'recall@1',
+                    'recall@2',
+                    'recall@3',
+                    'recall@4',
+                    'recall@5',
+                    'recall@6',
+                    'recall@7'
+                    ]
         )
 
         return
