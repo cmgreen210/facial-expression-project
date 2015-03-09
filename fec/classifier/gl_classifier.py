@@ -102,9 +102,7 @@ class GraphLabClassifierFromNetBuilder(ClassifierBase):
             validation_set=valid_set,
             metric=['accuracy',
                     'error',
-                    'recall@1',
-                    'recall@2',
-                    'recall@3'
+                    'recall@1'
                     ]
         )
 
