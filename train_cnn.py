@@ -126,6 +126,8 @@ if __name__ == '__main__':
     check_point_path = sys.argv[2]
     data_path = sys.argv[3]
     max_iterations = int(sys.argv[4])
+    if sys.argv[5] == '':
+        exit()
     model = int(sys.argv[5])
 
     if model == 1:
