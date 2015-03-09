@@ -1,0 +1,7 @@
+{% extends 'emotion/index.html' %}
+
+{% block content %}
+    {% for img_class in images %}
+        <img src="{{ img_class.image.url }}"/>
+    {% endfor %}
+{% endblock %}

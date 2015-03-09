@@ -30,10 +30,12 @@ def get_video(request):
                                         ContentFile(video_file.read()))
             path = pjoin(settings.MEDIA_ROOT, path)
             classifications, images = run_video_classifier(path)
-            clf_info, image_info = \
+            _, image_info = \
                 add_video_image_models(classifications, images)
 
-            return HttpResponse('Hello World!')
+            return render_to_response('emotion/image_array.html',
+                                      {'images': image_info},
+                                      context_instance=RequestContext(request))
     else:
         form = VideoForm()
 
