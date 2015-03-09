@@ -94,5 +94,5 @@ if __name__ == '__main__':
                                              train_frac=.91)
     model.fit(xtrain, ytrain)
 
-    model.evaluate(xtest, ytest, metric=['accuracy', 'confusion_matrix',
-                                         'recall@1', 'recall@2'])
+    print model.evaluate(xtest, ytest, metric=['accuracy', 'confusion_matrix',
+                                               'recall@1', 'recall@2'])
