@@ -7,15 +7,48 @@ import sys
 from sklearn.cross_validation import train_test_split
 
 
-if __name__ == '__main__':
-    # Create network builder and set network parameters
-    net = GraphLabNeuralNetBuilder()
+def create_gl_default(net):
+    #   ----Conv
+    stride = 1
+    num_channels = 10
+    kernel_size = 5
 
-    net.set_params_from_file(sys.argv[1])
-    check_point_path = sys.argv[2]
-    data_path = sys.argv[3]
-    max_iterations = int(sys.argv[4])
+    kwargs = {'padding': 2}
+    net.add_convolution_layer(kernel_size, stride, num_channels, **kwargs)
 
+    # ---Max Pooling---
+    padding = 0
+    stride = 2
+    kernel_size = 3
+
+    net.add_max_pooling_layer(kernel_size, stride, padding)
+
+    # ---Flatten---
+    net.add_flatten_layer()
+
+    #-----Fully Connected-----
+    num_hidden_units = 100
+
+    net.add_full_connection_layer(num_hidden_units)
+
+    #----ReLu-------
+    net.add_relu_layer()
+
+    #----Drop Out----
+    threshold = 0.5
+    net.add_dropout_layer(threshold=0.5)
+
+    #-----Fully Connected-----
+    num_hidden_units = 7
+
+    net.add_full_connection_layer(num_hidden_units)
+
+    #---SOFTMAX----
+    net.add_soft_max_layer()
+    return net
+
+
+def create_net_kag(net):
     #-------1st Convolution Layer---------
     stride = 1
     num_channels = 32
@@ -82,6 +115,19 @@ if __name__ == '__main__':
 
     # Soft Max Layer
     net.add_soft_max_layer()
+
+    return net
+
+if __name__ == '__main__':
+    # Create network builder and set network parameters
+    net = GraphLabNeuralNetBuilder()
+
+    net.set_params_from_file(sys.argv[1])
+    check_point_path = sys.argv[2]
+    data_path = sys.argv[3]
+    max_iterations = int(sys.argv[4])
+
+    net = create_net_kag(net)
 
     df = pd.read_pickle(data_path)
     x = np.array(df['pixels'].tolist())
