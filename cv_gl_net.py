@@ -7,10 +7,10 @@ import numpy as np
 
 # Create network builder and set network parameters
 net = GraphLabNeuralNetBuilder()
-net['learning_rate'] = 0.05
+net['learning_rate'] = 0.1
 net['momentum'] = 0.7
 net['divideby'] = 255
-net['learning_rate_schedule'] = 'polynomial_decay'
+net['learning_rate_schedule'] = 'constant'
 net['batch_size'] = 256
 net['learning_rate_alpha'] = 1
 net['learning_rate_gamma'] = 5e-5
