@@ -79,3 +79,19 @@ class GraphLabNeuralNetBuilder(object):
 
     def __setitem__(self, key, value):
         self.net.params[key] = value
+
+    def set_params_from_file(self, path):
+        with open(path) as f:
+            for line in f:
+                key_val = line.split(',')
+                if len(key_val) == 3:
+                    key = key_val[0].strip()
+                    value = key_val[1].strip()
+                    type = key_val[2].strip()
+                    if type == 'i':
+                        value = int(value)
+                    if type == 'f':
+                        value = float(value)
+                    if type == 'b':
+                        value = bool(value)
+                    self.net.params[key] = value

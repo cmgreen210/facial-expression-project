@@ -101,20 +101,30 @@ class GraphLabClassifierFromNetBuilder(ClassifierBase):
             verbose=self._verbose,
             validation_set=valid_set,
             metric=['accuracy',
+                    'error',
                     'recall@1',
                     'recall@2',
-                    'recall@3',
-                    'recall@4',
-                    'recall@5',
-                    'recall@6',
-                    'recall@7'
+                    'recall@3'
                     ]
         )
 
         return
 
+    def _create_gl_feature_mat(self, x):
+        scale_x = self._scale_features(x)
+        images = self._create_images(scale_x)
+        sf = gl.SFrame({self._feat_name: images})
+        return sf
+
     def predict(self, x):
-        return self._model.predict(x)
+        return self._model.predict(
+            self._create_gl_feature_mat(x))
 
     def predict_proba(self, x, k=3):
-        return self._model.predict_topk(x, k=k)
+        return self._model.predict_topk(
+            self._create_gl_feature_mat(x), k=k)
+
+    def evaluate(self, x, y, metric='auto'):
+        scale_x = self._scale_features(x)
+        dataset = self._assemble_full_dataset(scale_x, y)
+        return self._model.evaluate(dataset, metric=metric)

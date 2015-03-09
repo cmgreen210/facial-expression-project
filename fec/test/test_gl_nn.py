@@ -1,5 +1,6 @@
 import unittest
 from fec.classifier.gl_nn import GraphLabNeuralNetBuilder
+import os
 
 
 class GraphLabNeuralNetTest(unittest.TestCase):
@@ -54,3 +55,13 @@ class GraphLabNeuralNetTest(unittest.TestCase):
         nn = GraphLabNeuralNetBuilder()
         nn['momentum'] = 0.5
         self.assertEqual(nn['momentum'], 0.5)
+
+    def test_set_params_from_file(self):
+        dir, _ = os.path.split(os.path.abspath(__file__))
+        file_path = os.path.join(dir, 'data', 'net_params.txt')
+
+        net = GraphLabNeuralNetBuilder()
+        net.set_params_from_file(file_path)
+        self.assertEqual(net['learning_rate'], 0.1)
+        self.assertEqual(net['batch_size'], 256)
+        self.assertEqual(net['learning_rate_schedule'], 'constant')
