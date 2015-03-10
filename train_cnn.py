@@ -7,7 +7,7 @@ import sys
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import precision_score, f1_score
 from os.path import join as pjoin
-
+import os.path as opath
 
 def simple_net_1(net):
     #   ----Conv
@@ -218,7 +218,8 @@ if __name__ == '__main__':
     test_f1 = f1_score(ytest, ypred)
     test_precision = f1_score(ytest, ypred)
 
-    result_file = open(pjoin(check_point_path, 'results.txt'))
+    dir, _ = opath.split(check_point_path)
+    result_file = open(pjoin(dir, 'results.txt'))
 
     write = lambda val: print(val, file=result_file)
     write('accuracy, {0:1.6f}'.format(eval['accuracy']))
@@ -235,3 +236,5 @@ if __name__ == '__main__':
             row['count']
         ))
     result_file.close()
+
+    net.save(pjoin(dir, 'net.conf'))
