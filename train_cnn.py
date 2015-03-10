@@ -6,7 +6,7 @@ import numpy as np
 import sys
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import precision_score, f1_score
-import os.path.join as pjoin
+from os.path import join as pjoin
 
 
 def simple_net_1(net):
