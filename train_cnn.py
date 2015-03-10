@@ -237,4 +237,4 @@ if __name__ == '__main__':
         ))
     result_file.close()
 
-    net.save(pjoin(dir, 'net.conf'))
+    net.get_net().save(pjoin(dir, 'net.conf'))
