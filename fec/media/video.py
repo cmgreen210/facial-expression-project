@@ -128,21 +128,16 @@ VideoStreamClassifyBase.register(CameraClassifier)
 
 
 class VideoFileClassifier(VideoStreamClassifyBase):
-    def __init__(self, classifier, source, frame_skip=20, name=""):
+    def __init__(self, classifier, source, frame_skip=20, name="",
+                 h=48, w=48, d=1):
         super(VideoFileClassifier, self).__init__(classifier, frame_skip)
         self._source = source
         self._capture = None
         self._name = name
 
-        this_dir, _ = os.path.split(os.path.abspath(__file__))
-        self.tmp_dir = os.path.join(this_dir, 'tmp')
-        if os.path.exists(self.tmp_dir):
-            shutil.rmtree(self.tmp_dir)
-        os.mkdir(self.tmp_dir)
-        os.mkdir(os.path.join(self.tmp_dir,
-                              'class'))
-        os.mkdir(os.path.join(self.tmp_dir,
-                              'orig'))
+        self._h = h
+        self._w = w
+        self._d = d
 
     def start(self):
 
@@ -167,54 +162,20 @@ class VideoFileClassifier(VideoStreamClassifyBase):
 
         if self.images is not None:
             count = 0
-            self.orig_to_transformed_paths = {}
-            # TODO: Make this simpler using SArray pixel_array_to_image
-            for im in self.images:
-                original_im = im[0]
-                orig_dir = os.path.join(self.tmp_dir, 'orig')
-                orig_file_name = os.path.join(orig_dir,
-                                              'orig_' + str(count) + '.png')
-                cv2.imwrite(orig_file_name, original_im)
 
-                class_im = im[1]
-                class_dir = os.path.join(self.tmp_dir, 'class')
-                class_file_name = os.path.join(class_dir,
-                                               'class_' + str(count) + '.png')
-                cv2.imwrite(class_file_name, class_im)
+            self.transformed_image = []
+            self.original_images = []
+            for im in self.images:
+                self.original_images.append(im[0])
+                self.transformed_image.append(im[1].flatten().tolist())
                 count += 1
 
-                self.orig_to_transformed_paths[orig_file_name] =\
-                    class_file_name
+            x = gl.SArray(self.transformed_image)
+            x.pixel_array_to_image(self._w, self._h, self._d)
+            x = gl.SFrame({'images': x})
 
-            x = gl.image_analysis.load_images(class_dir)
-            x.rename({'image': 'images'})
             if self.classifier is not None:
                 self._classifications = self.classifier(x)
-
-            self.original_images = gl.image_analysis.load_images(orig_dir)
-            self.original_images.rename({'image': 'images'})
-            self.transformed_image = x
-
-            xp = self.original_images['path']
-            x_images = self.original_images['images']
-
-            original_temp = []
-            for orig_path, trans_path in self.\
-                    orig_to_transformed_paths.iteritems():
-                t = xp == orig_path
-                orig_idx = np.where(t == 1)[0][0]
-                original_temp.append(x_images[int(orig_idx)])
-
-            sarray = gl.SArray(original_temp)
-            self.transformed_image.add_column(sarray, 'original_images')
-
-            self.transformed_image =\
-                self.transformed_image[['images', 'original_images']]
-
-            self.transformed_image =\
-                self.transformed_image.add_row_number()
-
-            shutil.rmtree(self.tmp_dir)
 
     def get_classifications(self):
         return self._classifications
@@ -241,3 +202,6 @@ if __name__ == '__main__':
                               '/tmp_video/vid.mov')
     vid.start()
     vid.stop()
+
+    print len(vid.original_images)
+    print len(vid.transformed_image)
