@@ -2,4 +2,5 @@ db.sqlite3
 .idea/*
 *.pyc
 tmp*/
-.ipynb
+*.pkl
+*.npy

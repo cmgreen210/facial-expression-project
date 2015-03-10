@@ -45,8 +45,12 @@ if __name__ == '__main__':
 
     fer_data = '/Users/chris/Downloads/fer2013/fer2013.csv'
     df = _load_original_data_into_df(fer_data)
-    df.to_csv('/Users/chris/tmp/fer_processed.csv')
-    con = get_connection()
-    bucket = con.get_bucket('cmgreen210-emotions')
-    upload_big_file('/Users/chris/tmp/fer_processed.csv',
-                    bucket)
+    this_path = os.path.abspath(__file__)
+    this_dir, _ = os.path.split(this_path)
+    df_path = os.path.join(this_dir, 'data', 'emotion.pkl')
+    df.to_pickle(df_path)
+    # df.to_csv('/Users/chris/tmp/fer_processed.csv')
+    # con = get_connection()
+    # bucket = con.get_bucket('cmgreen210-emotions')
+    # upload_big_file('/Users/chris/tmp/fer_processed.csv',
+    #                 bucket)
