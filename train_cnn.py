@@ -157,6 +157,8 @@ def create_net_2_conv(net):
     net.add_max_pooling_layer(kernel_size, stride, padding)
 
     #-----Fully Connected-----
+    net.add_flatten_layer()
+
     num_hidden_units = 256
 
     net.add_full_connection_layer(num_hidden_units)
