@@ -118,6 +118,58 @@ def create_net_kag(net):
 
     return net
 
+
+def create_net_2_conv(net):
+    #   ----Conv
+    stride = 1
+    num_channels = 32
+    kernel_size = 3
+
+    kwargs = {'padding': 1}
+    net.add_convolution_layer(kernel_size, stride, num_channels, **kwargs)
+
+    # RELU
+    net.add_relu_layer()
+
+    # ---Max Pooling---
+    padding = 0
+    stride = 2
+    kernel_size = 2
+
+    net.add_max_pooling_layer(kernel_size, stride, padding)
+
+    #   ----Conv
+    stride = 1
+    num_channels = 64
+    kernel_size = 3
+
+    kwargs = {'padding': 1}
+    net.add_convolution_layer(kernel_size, stride, num_channels, **kwargs)
+
+    # RELU
+    net.add_relu_layer()
+
+    # ---Max Pooling---
+    padding = 0
+    stride = 2
+    kernel_size = 2
+
+    net.add_max_pooling_layer(kernel_size, stride, padding)
+
+    #-----Fully Connected-----
+    num_hidden_units = 256
+
+    net.add_full_connection_layer(num_hidden_units)
+
+    #-----Fully Connected-----
+    num_hidden_units = 7
+
+    net.add_full_connection_layer(num_hidden_units)
+
+    #---SOFTMAX----
+    net.add_soft_max_layer()
+    return net
+
 if __name__ == '__main__':
     # Create network builder and set network parameters
     net = GraphLabNeuralNetBuilder()
@@ -136,6 +188,8 @@ if __name__ == '__main__':
         net = create_gl_default(net)
     elif model == 3:
         net = create_gl_default(net, 32)
+    elif model == 4:
+        net = create_net_2_conv(net)
     else:
         exit()
 
