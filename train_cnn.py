@@ -7,10 +7,10 @@ import sys
 from sklearn.cross_validation import train_test_split
 
 
-def create_gl_default(net):
+def create_gl_default(net, conv_channels=10, hidden_channels=100):
     #   ----Conv
     stride = 1
-    num_channels = 10
+    num_channels = conv_channels
     kernel_size = 5
 
     kwargs = {'padding': 2}
@@ -27,7 +27,7 @@ def create_gl_default(net):
     net.add_flatten_layer()
 
     #-----Fully Connected-----
-    num_hidden_units = 100
+    num_hidden_units = hidden_channels
 
     net.add_full_connection_layer(num_hidden_units)
 
@@ -134,6 +134,8 @@ if __name__ == '__main__':
         net = create_net_kag(net)
     elif model == 2:
         net = create_gl_default(net)
+    elif model == 3:
+        net = create_gl_default(net, 32)
     else:
         exit()
 
