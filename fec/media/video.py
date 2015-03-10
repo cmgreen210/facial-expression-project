@@ -30,7 +30,7 @@ class VideoStreamClassifyBase(object):
         self.image_processor = image_processor
 
         self.original_images = None
-        self.transformed_image = None
+        self.transformed_images = None
         self.image_paths = None
 
     def get_classifications(self):
@@ -163,14 +163,19 @@ class VideoFileClassifier(VideoStreamClassifyBase):
         if self.images is not None:
             count = 0
 
-            self.transformed_image = []
+            self.transformed_images = []
             self.original_images = []
+            images_to_gl = []
             for im in self.images:
+                if im[0] is None or im[1] is None:
+                    continue
+
                 self.original_images.append(im[0])
-                self.transformed_image.append(im[1].flatten().tolist())
+                self.transformed_images.append(im[1])
+                images_to_gl.append(im[1].flatten().tolist())
                 count += 1
 
-            x = gl.SArray(self.transformed_image)
+            x = gl.SArray(images_to_gl)
             x.pixel_array_to_image(self._w, self._h, self._d)
             x = gl.SFrame({'images': x})
 
@@ -181,7 +186,7 @@ class VideoFileClassifier(VideoStreamClassifyBase):
         return self._classifications
 
     def get_final_images(self):
-        return self.transformed_image
+        return self.original_images, self.transformed_images
 
     @property
     def source(self):
@@ -204,4 +209,4 @@ if __name__ == '__main__':
     vid.stop()
 
     print len(vid.original_images)
-    print len(vid.transformed_image)
+    print len(vid.transformed_images)

@@ -6,6 +6,7 @@ import random
 from PIL import Image
 from cStringIO import StringIO
 from django.core.files.base import ContentFile
+import cv2
 
 
 def validate_request_type(value):
@@ -75,7 +76,7 @@ class ImageClassification(models.Model):
     rank3_prob = models.FloatField(default=0.0)
 
 
-def _save_img_helper(img_field, image, format='png'):
+def _save_img_helper(img_field, image, format='jpeg'):
     f = StringIO()
     image.save(f, format)
     s = f.getvalue()
@@ -122,9 +123,9 @@ def add_video_image_models(predictions, images, max_image=6):
             rank3_prob=prob[2],
         )
 
-        image_data = images[img]
-        image = Image.fromarray(image_data['original_images'].pixel_data)
-        gray_image = Image.fromarray(image_data['images'].pixel_data)
+        image_data = (images[0][img], images[1][img])
+        image = Image.fromarray(cv2.cvtColor(image_data[0], cv2.COLOR_BGR2RGB))
+        gray_image = Image.fromarray(image_data[1])
 
         _save_img_helper(ic.image, image)
         _save_img_helper(ic.gray_image, gray_image)
