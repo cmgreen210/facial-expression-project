@@ -42,7 +42,7 @@ if __name__ == '__main__':
     df = pd.read_pickle(data_path)
 
     cond_happy = df['emotion'] == 3
-    cond_sad = df['emotion'] == 2
+    cond_sad = df['emotion'] == 4
     cond_surprise = df['emotion'] == 5
 
     df = df[cond_happy | cond_sad | cond_surprise]
