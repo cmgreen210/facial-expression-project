@@ -219,7 +219,7 @@ if __name__ == '__main__':
     test_precision = f1_score(ytest, ypred)
 
     dir, _ = opath.split(check_point_path)
-    result_file = open(pjoin(dir, 'results.txt'))
+    result_file = open(pjoin(dir, 'results.txt'), 'w')
 
     write = lambda val: print(val, file=result_file)
     write('accuracy, {0:1.6f}'.format(eval['accuracy']))
