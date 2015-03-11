@@ -9,6 +9,11 @@ from django.core.files.base import ContentFile
 import cv2
 
 
+_emotion_dictionary = {3: 'happy',
+                       4: 'sad',
+                       5: 'surprised'}
+
+
 def validate_request_type(value):
     """
     Validates that the request type is either 0 or 1
@@ -83,6 +88,15 @@ def _save_img_helper(img_field, image, format='jpeg'):
     img_field.save('', ContentFile(s), True)
 
 
+def _image_emotion_score(image_clf):
+    global _emotion_dictionary
+    out_dict = {}
+    out_dict[_emotion_dictionary[image_clf.rank1]] = image_clf.rank1_prob
+    out_dict[_emotion_dictionary[image_clf.rank2]] = image_clf.rank2_prob
+    out_dict[_emotion_dictionary[image_clf.rank3]] = image_clf.rank3_prob
+    return out_dict
+
+
 def add_video_image_models(predictions, images, max_image=6):
     clf_request = ClassificationRequest(rand_string=create_rand_string(),
                                         type=0)
@@ -118,9 +132,9 @@ def add_video_image_models(predictions, images, max_image=6):
             rank1=classes[0],
             rank2=classes[1],
             rank3=classes[2],
-            rank1_prob=prob[0],
-            rank2_prob=prob[1],
-            rank3_prob=prob[2],
+            rank1_prob=100 * prob[0],
+            rank2_prob=100 * prob[1],
+            rank3_prob=100 * prob[2],
         )
 
         image_data = (images[0][img], images[1][img])
@@ -132,7 +146,7 @@ def add_video_image_models(predictions, images, max_image=6):
 
         ic.save()
 
-        image_classifiers.append(ic)
+        image_classifiers.append((ic.image.url, _image_emotion_score(ic)))
     return clf_request, image_classifiers
 
 
@@ -151,9 +165,9 @@ def add_image_models(predictions, original, scaled):
         rank1=classes[0],
         rank2=classes[1],
         rank3=classes[2],
-        rank1_prob=prob[0],
-        rank2_prob=prob[1],
-        rank3_prob=prob[2],
+        rank1_prob=100 * prob[0],
+        rank2_prob=100 * prob[1],
+        rank3_prob=100 * prob[2],
     )
 
     _save_img_helper(ic.image, Image.fromarray(original.pixel_data))
@@ -161,5 +175,5 @@ def add_image_models(predictions, original, scaled):
                      Image.fromarray(scaled.pixel_data))
 
     ic.save()
-
-    return clf_request, ic
+    scores = _image_emotion_score(ic)
+    return clf_request, ic.image.url, scores

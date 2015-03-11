@@ -1,8 +1,9 @@
 {% extends 'emotion/index.html' %}
 
 {% block content %}
-    {% for url, scores in images %}
-        <img src="{{ url }}"/>
+    <div class="row">
+        <div class="col-md-12">
+            <img src="{{ url }}"/>
             <div class="row">
                 <div class="col-md-6">
                         {% include "emotion/probability.html" with value=scores.happy title="Happy" %}
@@ -10,5 +11,6 @@
                         {% include "emotion/probability.html" with value=scores.surprised title="Surprised "%}
                 </div>
             </div>
-    {% endfor %}
+        </div>
+    </div>
 {% endblock %}

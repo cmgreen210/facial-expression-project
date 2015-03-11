@@ -31,7 +31,7 @@ def get_image_classifier():
     return _image_clf
 
 
-def run_video_classifier(video_path, frame_skip=5):
+def run_video_classifier(video_path, frame_skip=2):
     """
 
     :param video_path:

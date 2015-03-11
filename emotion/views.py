@@ -29,12 +29,15 @@ def get_video(request):
             path = default_storage.save('tmp_video/vid' + ext,
                                         ContentFile(video_file.read()))
             path = pjoin(settings.MEDIA_ROOT, path)
-            classifications, images = run_video_classifier(path)
-            _, image_info = \
+            classifications, images = run_video_classifier(path, frame_skip=1)
+            _, image_clfs = \
                 add_video_image_models(classifications, images)
 
+            if os.path.exists(path):
+                os.remove(path)
+
             return render_to_response('emotion/image_array.html',
-                                      {'images': image_info},
+                                      {'images': image_clfs},
                                       context_instance=RequestContext(request))
     else:
         form = VideoForm()
@@ -61,10 +64,15 @@ def get_image(request):
                 # TODO: No face found so alert the user
                 pass
             image, gray_image, class_proba = out
-            clf_request, image_clf_info = add_image_models(class_proba,
+            _, image_url, scores = add_image_models(class_proba,
                                                            image,
                                                            gray_image)
-            return HttpResponseRedirect('/')
+            if os.path.exists(path):
+                os.remove(path)
+            return render_to_response('emotion/single_image.html',
+                                      {'url': image_url,
+                                       'scores': scores},
+                                      context_instance=RequestContext(request))
     else:
         form = ImageForm()
 

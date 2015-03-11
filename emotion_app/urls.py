@@ -6,4 +6,5 @@ from django.views.generic import RedirectView
 urlpatterns = patterns('',
                        url(r'^emotion/', include('emotion.urls')),
                        ) + static(settings.MEDIA_URL,
-                                  document_root=settings.MEDIA_ROOT)
+                                  document_root=settings.MEDIA_ROOT)+ \
+                         static(settings.STATIC_URL)
