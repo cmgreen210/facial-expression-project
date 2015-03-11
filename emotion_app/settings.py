@@ -90,7 +90,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 CONTENT_TYPES = ['image']
 VIDEO_TYPES = ['video/quicktime', 'video/mp4']
-IMAGE_TYPES = ['image/jpeg']
+IMAGE_TYPES = ['image/jpeg', 'image/png']
 # 2.5MB - 2621440
 # 5MB - 5242880
 # 10MB - 10485760
