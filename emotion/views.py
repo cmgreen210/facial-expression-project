@@ -61,8 +61,14 @@ def get_image(request):
             path = pjoin(settings.MEDIA_ROOT, path)
             out = run_image_classifier(path)
             if out is None:
-                # TODO: No face found so alert the user
-                pass
+                return render_to_response('emotion/image_bad.html',
+                                          {'error_message':
+                                          'No faces were found in the image. '
+                                          'Please try another!'},
+                                          context_instance=RequestContext(
+                                              request
+                                          ))
+
             image, gray_image, class_proba = out
             _, image_url, scores = add_image_models(class_proba,
                                                            image,

@@ -3,18 +3,14 @@
 {% block jumbo_title %}All the feels!{% endblock %}
 {% block jumbo_content %}{% endblock %}
 {% block content %}
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-default">
+    <div class="container">
+        <div class="span6 offset4">
+            <div class="thumbnail">
                 <img class="center-block img-rounded" src="{{ url }}"/>
-                <div class="panel-body">
-                    <div class="col-md-4">
-                            {% include "emotion/probability.html" with value=scores.happy title="Happy" %}
-                            {% include "emotion/probability.html" with value=scores.sad title="Sad" %}
-                            {% include "emotion/probability.html" with value=scores.surprised title="Surprised "%}
-                    </div>
-                </div>
             </div>
+            {% include "emotion/probability.html" with value=scores.happy title="Happy" %}
+            {% include "emotion/probability.html" with value=scores.sad title="Sad" %}
+            {% include "emotion/probability.html" with value=scores.surprised title="Surprised "%}
         </div>
     </div>
 {% endblock %}

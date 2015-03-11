@@ -1,0 +1,8 @@
+{% extends 'emotion/index.html' %}
+
+{% block jumbo_title %}Oops, something went wrong....{% endblock %}
+{% block jumbo_content %}{{ error_message }}{% endblock %}
+
+{% block content %}
+<a class="btn btn-primary btn-lg btn-block" role="button" href="/emotion">&#8592; Back</a>
+{% endblock %}
