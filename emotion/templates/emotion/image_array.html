@@ -1,5 +1,8 @@
 {% extends 'emotion/index.html' %}
 
+{% block jumbo_title %}Here's some frames{% endblock %}
+{% block jumbo_content %}{% endblock %}
+
 {% block content %}
     {% for url, scores in images %}
         <img src="{{ url }}"/>

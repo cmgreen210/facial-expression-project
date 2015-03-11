@@ -2,3 +2,9 @@
     float: left;
     margin-right: 1em;
 }
+
+.center-block {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+ }

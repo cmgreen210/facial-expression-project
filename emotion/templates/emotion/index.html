@@ -7,8 +7,36 @@
     <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}">
 </head>
 <body>
+    <div class="container">
+        <!-- Static navbar -->
+          <nav class="navbar navbar-default">
+            <div class="container-fluid">
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Emotion Classifier</a>
+              </div>
+              <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                  <li class="active"><a href="/">Home</a></li>
+                </ul>
+              </div><!--/.nav-collapse -->
+            </div><!--/.container-fluid -->
+          </nav>
 
-    <div class="container-fluid">
+          <!-- Main jumbotron for a primary marketing message or call to action -->
+        <div class="jumbotron">
+          <div class="container">
+            <h2>{% block jumbo_title %}Let's find some feelings!{% endblock %}</h2>
+            {% block jumbo_content %}<p>Upload a video or image</p>{% endblock %}
+          </div>
+        </div>
+
+
         {% block content %}
         {% endblock %}
     </div>

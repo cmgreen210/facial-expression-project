@@ -13,7 +13,7 @@
                     <input type="submit" value="Submit"/>
             </form>
         </div>
-        <div>
+        <div class="col-md-6">
             <form action="{% url 'emotion.views.get_image' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <p>{{ i_form.non_field_errors }}</p>
