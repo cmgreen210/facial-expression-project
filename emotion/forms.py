@@ -4,6 +4,13 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 
+class UploadImageFromURLForm(forms.Form):
+    url = forms.URLField(required=True,
+                         error_messages={
+                             "required": "Please enter a valid image URL"
+                         })
+
+
 class LimitedFileField(forms.FileField):
     def __init__(self, *args, **kwargs):
         self.content_types = kwargs.pop('content_types', None)

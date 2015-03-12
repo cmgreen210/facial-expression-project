@@ -1,30 +1,35 @@
 {% extends 'emotion/index.html' %}
 {% block content %}
     <div class="row">
-        <div class="col-md-6">
-            <form action="{% url 'emotion.views.get_video' %}" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <p>{{ v_form.non_field_errors }}</p>
-                    <p>{{ v_form.video_file.label_tag }} {{ v_form.video_file.help_text }}</p>
-                    <p>
-                        {{ v_form.video_file.errors }}
-                        {{ v_form.video_file }}
-                    </p>
-                    <input type="submit" value="Submit" style="text-align: center;"/>
-            </form>
-        </div>
-        <div class="col-md-6">
-            <form action="{% url 'emotion.views.get_image' %}" method="post" enctype="multipart/form-data">
-
-                    {% csrf_token %}
-                    <p>{{ i_form.non_field_errors }}</p>
-                    <p>{{ i_form.image_file.label_tag }} {{ i_form.image_file.help_text }}</p>
-                    <p>
-                        {{ i_form.image_file.errors }}
-                        {{ i_form.image_file }}
-                    </p>
-                    <input type="submit" value="Submit"/>
-            </form>
-        </div>
+{#        <div class="col-md-6">#}
+{#            <form action="{% url 'emotion.views.get_video' %}" method="post" enctype="multipart/form-data">#}
+{#                    {% csrf_token %}#}
+{#                    <p>{{ v_form.non_field_errors }}</p>#}
+{#                    <p>{{ v_form.video_file.label_tag }} {{ v_form.video_file.help_text }}</p>#}
+{#                    <p>#}
+{#                        {{ v_form.video_file.errors }}#}
+{#                        {{ v_form.video_file }}#}
+{#                    </p>#}
+{#                    <input type="submit" value="Submit" style="text-align: center;"/>#}
+{#            </form>#}
+{#        </div>#}
+{#        <div class="col-md-6">#}
+{#            <form action="{% url 'emotion.views.get_image' %}" method="post" enctype="multipart/form-data">#}
+{##}
+{#                    {% csrf_token %}#}
+{#                    <p>{{ i_form.non_field_errors }}</p>#}
+{#                    <p>{{ i_form.image_file.label_tag }} {{ i_form.image_file.help_text }}</p>#}
+{#                    <p>#}
+{#                        {{ i_form.image_file.errors }}#}
+{#                        {{ i_form.image_file }}#}
+{#                    </p>#}
+{#                    <input type="submit" value="Submit"/>#}
+{#            </form>#}
+{#        </div>#}
+        <form action="{% url 'image' %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Upload Image" />
+        </form>
     </div>
 {% endblock %}
