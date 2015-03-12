@@ -2,7 +2,9 @@
 
 <div class="col-sm-4">
     {% with 'image/'|add:title|lower|add:'.jpg' as path %}
-        <h3>{{ title }}</h3>
-        <img src="{% static path %}" class="img-responsive img-thumbnail">
+        <h3 align="center">{{ title }}</h3>
+        <div align="center">
+            <img src="{% static path %}" class="img-responsive img-thumbnail" align="center">
+        </div>
     {% endwith %}
 </div>
