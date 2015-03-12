@@ -14,11 +14,9 @@ import StringIO
 
 
 def home_page(request):
-    v_form = VideoForm()
-    i_form = ImageForm()
+    form = UploadImageFromURLForm()
     return render(request, 'emotion/media_upload.html',
-                  {'v_form': v_form,
-                   'i_form': i_form})
+                  {'form': form})
 
 
 def get_video(request):
@@ -128,7 +126,7 @@ class UploadImageFromURLView(FormView):
         return super(UploadImageFromURLView, self).form_invalid(form)
 
     def form_valid(self, form):
-
+        print form.data
         url = form.data['url']
         domain, path = split_url(url)
         filename = get_url_tail(path)

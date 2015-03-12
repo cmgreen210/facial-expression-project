@@ -1,10 +1,25 @@
 {% extends 'emotion/index.html' %}
+{% load bootstrap %}
+
 {% block content %}
-    <div class="row">
+    <div class="row-fluid">
         <form action="{% url 'image' %}" method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Upload Image" />
+            <div class="form-group">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                {# Include the visible fields #}
+                {% for field in form.visible_fields %}
+                    <div class="fieldWrapper">
+                        {{ field.errors }}
+                    </div>
+                {% endfor %}
+                {{ form|bootstrap_inline }}
+                <div class="span4 offset4 text-center">
+                    <button type="submit" class="btn btn-lg btn-info">Upload &#8594;</button>
+                </div>
+            </div>
         </form>
     </div>
 {% endblock %}
