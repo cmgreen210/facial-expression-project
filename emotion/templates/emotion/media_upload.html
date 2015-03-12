@@ -1,5 +1,6 @@
 {% extends 'emotion/index.html' %}
 {% load bootstrap %}
+{% load staticfiles %}
 
 {% block content %}
     <div class="row-fluid">
@@ -21,5 +22,10 @@
                 </div>
             </div>
         </form>
+    </div>
+    <div class="row">
+        {% include "emotion/example_image.html" with title="Happy" %}
+        {% include "emotion/example_image.html" with title="Sad" %}
+        {% include "emotion/example_image.html" with title="Surprised" %}
     </div>
 {% endblock %}

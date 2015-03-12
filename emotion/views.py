@@ -126,7 +126,6 @@ class UploadImageFromURLView(FormView):
         return super(UploadImageFromURLView, self).form_invalid(form)
 
     def form_valid(self, form):
-        print form.data
         url = form.data['url']
         domain, path = split_url(url)
         filename = get_url_tail(path)
