@@ -19,6 +19,7 @@ def simple_net_1(net):
     kwargs = {'padding': 2}
     net.add_convolution_layer(kernel_size, stride, num_channels, **kwargs)
 
+
     # ---Max Pooling---
     padding = 0
     stride = 2
@@ -31,6 +32,60 @@ def simple_net_1(net):
 
     #-----Fully Connected-----
     num_hidden_units = 256
+
+    net.add_full_connection_layer(num_hidden_units)
+
+    #----ReLu-------
+    net.add_relu_layer()
+
+    #----Drop Out----
+    threshold = 0.3
+    net.add_dropout_layer(threshold=threshold)
+
+    #-----Fully Connected-----
+    num_hidden_units = 3
+
+    net.add_full_connection_layer(num_hidden_units)
+
+    #---SOFTMAX----
+    net.add_soft_max_layer()
+    return net
+
+
+def simple_net_2(net):
+    #   ----Conv
+    stride = 1
+    num_channels = 32
+    kernel_size = 3
+
+    kwargs = {'padding': 1}
+    net.add_convolution_layer(kernel_size, stride, num_channels, **kwargs)
+
+    net.add_relu_layer()
+
+    #-Convolution Layer-
+    stride = 1
+    num_channels = 32
+    kernel_size = 3
+
+    kwargs = {'padding': 1}
+    net.add_convolution_layer(kernel_size, stride, num_channels, **kwargs)
+
+    net.add_relu_layer()
+    net.add_dropout_layer(.3)
+
+    # ---Max Pooling---
+    padding = 0
+    stride = 2
+    kernel_size = 3
+
+    net.add_max_pooling_layer(kernel_size, stride, padding)
+
+    # ---Flatten---
+    net.add_flatten_layer()
+
+    #-----Fully Connected-----
+    num_hidden_units = 512
 
     net.add_full_connection_layer(num_hidden_units)
 
@@ -189,6 +244,8 @@ if __name__ == '__main__':
 
     if model == 1:
         net = simple_net_1(net)
+    elif model == 2:
+        net = simple_net_2(net)
     else:
         exit()
 
