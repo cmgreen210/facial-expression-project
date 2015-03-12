@@ -4,7 +4,7 @@ from emotion.views import *
 
 urlpatterns = patterns('',
                        url(r'^$', home_page, name='home'),
-                       # url(r'^video/$', emotion.views.get_video, name='video'),
                        url(r'^image/$', UploadImageFromURLView.as_view(),
                            name='image'),
+                       url(r'^example/(?P<ex_name>\w+)', example_view)
                        )

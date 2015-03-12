@@ -6,10 +6,9 @@ import random
 from PIL import Image
 from cStringIO import StringIO
 from django.core.files.base import ContentFile
-import cv2
 
 
-_emotion_dictionary = {3: 'happy',
+emotion_dictionary = {3: 'happy',
                        4: 'sad',
                        5: 'surprised'}
 
@@ -89,65 +88,12 @@ def _save_img_helper(img_field, image, format='jpeg'):
 
 
 def _image_emotion_score(image_clf):
-    global _emotion_dictionary
+    global emotion_dictionary
     out_dict = {}
-    out_dict[_emotion_dictionary[image_clf.rank1]] = image_clf.rank1_prob
-    out_dict[_emotion_dictionary[image_clf.rank2]] = image_clf.rank2_prob
-    out_dict[_emotion_dictionary[image_clf.rank3]] = image_clf.rank3_prob
+    out_dict[emotion_dictionary[image_clf.rank1]] = image_clf.rank1_prob
+    out_dict[emotion_dictionary[image_clf.rank2]] = image_clf.rank2_prob
+    out_dict[emotion_dictionary[image_clf.rank3]] = image_clf.rank3_prob
     return out_dict
-
-
-def add_video_image_models(predictions, images, max_image=6):
-    clf_request = ClassificationRequest(rand_string=create_rand_string(),
-                                        type=0)
-    clf_request.save()
-
-    best_predictions = predictions.sort(sort_columns='score', ascending=False)
-    image_dict = {}
-
-    rank = 1
-    count = 0
-    for row in best_predictions:
-        if count == max_image:
-            break
-        image_id = row['row_id']
-
-        if image_id in image_dict:
-            continue
-
-        image_dict[image_id] = rank
-
-        rank += 1
-        count += 1
-
-    image_classifiers = []
-    for img, rank in image_dict.iteritems():
-        sf = best_predictions.filter_by(img, column_name='row_id')
-
-        classes = sf['class']
-        prob = sf['score']
-        ic = ImageClassification(
-            request=clf_request,
-            image_rank=rank,
-            rank1=classes[0],
-            rank2=classes[1],
-            rank3=classes[2],
-            rank1_prob=100 * prob[0],
-            rank2_prob=100 * prob[1],
-            rank3_prob=100 * prob[2],
-        )
-
-        image_data = (images[0][img], images[1][img])
-        image = Image.fromarray(cv2.cvtColor(image_data[0], cv2.COLOR_BGR2RGB))
-        gray_image = Image.fromarray(image_data[1])
-
-        _save_img_helper(ic.image, image)
-        _save_img_helper(ic.gray_image, gray_image)
-
-        ic.save()
-
-        image_classifiers.append((ic.image.url, _image_emotion_score(ic)))
-    return clf_request, image_classifiers
 
 
 def add_image_models(predictions, original, scaled):

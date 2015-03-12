@@ -5,12 +5,14 @@ from django.core.files.base import ContentFile
 from django.conf import settings
 from PIL import Image
 from os.path import join as pjoin
-from forms import VideoForm, ImageForm, UploadImageFromURLForm
-from emotion.pipeline import run_video_classifier, run_image_classifier
-from emotion.models import add_video_image_models, add_image_models
+from forms import UploadImageFromURLForm
+from emotion.pipeline import run_image_classifier
+from emotion.models import add_image_models, emotion_dictionary
 from django.views.generic.edit import FormView
 from validation import *
 import StringIO
+from django.contrib.staticfiles import finders
+from itertools import izip
 
 
 def home_page(request):
@@ -19,101 +21,32 @@ def home_page(request):
                   {'form': form})
 
 
-def get_video(request):
+def example_view(request, ex_name):
+    ex_name = ex_name.lower()
+    url = os.path.join('image', ex_name + '.jpg')
+    path = finders.find(url)
+    if path is None:
+        return render_to_response('emotion/image_bad.html',
+                                      {'error_message':
+                                      'Example image was not found!'},
+                                      context_instance=RequestContext(
+                                          request
+                                      ))
+    out = run_image_classifier(path)
+    image, gray_image, class_proba = out
 
-    if request.method == 'POST':
-        form = VideoForm(request.POST, request.FILES)
-        if form.is_valid():
-            try:
-                video_file = request.FILES['video_file']
-                _, ext = os.path.splitext(video_file._name)
-                path = default_storage.save('tmp_video/vid' + ext,
-                                            ContentFile(video_file.read()))
-                path = pjoin(settings.MEDIA_ROOT, path)
-                classifications, images = run_video_classifier(path, frame_skip=1)
-                _, image_clfs = \
-                    add_video_image_models(classifications, images)
+    best_predictions = class_proba.sort(sort_columns='score',
+                                        ascending=False)
+    classes = best_predictions['class']
+    prob = best_predictions['score'] * 100
+    scores = {}
+    for c, p in izip(classes, prob):
+        scores[emotion_dictionary[c]] = p
 
-                if os.path.exists(path):
-                    os.remove(path)
-
-                if image_clfs[0] is None:
-                    return render_to_response('emotion/image_bad.html',
-                                              {'error_message':
-                                              "Didn't find any faces! Try"
-                                              " another clip."},
-                                              context_instance=RequestContext(
-                                                  request
-                                              ))
-
-                return render_to_response('emotion/image_array.html',
-                                          {'images': image_clfs},
-                                          context_instance=RequestContext(
-                                              request))
-            except:
-                return render_to_response('emotion/image_bad.html',
-                                              {'error_message':
-                                              'Unexpected error!'},
-                                              context_instance=RequestContext(
-                                                  request
-                                              ))
-    else:
-        form = VideoForm()
-
-    iform = ImageForm()
-
-    return render_to_response('emotion/media_upload.html', {'v_form': form,
-                                                            'i_form': iform},
-                              context_instance=RequestContext(request))
-
-
-def get_image(request):
-
-    if request.method == 'POST':
-        form = ImageForm(request.POST, request.FILES)
-        if form.is_valid():
-            try:
-                image_file = request.FILES['image_file']
-                _, ext = os.path.splitext(image_file. _name)
-                path = default_storage.save('tmp_img/img' + ext,
-                                            ContentFile(image_file.read()))
-                path = pjoin(settings.MEDIA_ROOT, path)
-                out = run_image_classifier(path)
-                if out is None:
-                    if os.path.exists(path):
-                        os.remove(path)
-                    return render_to_response('emotion/image_bad.html',
-                                              {'error_message':
-                                              'No faces were found in the '
-                                              'image. Please try another!'},
-                                              context_instance=RequestContext(
-                                                  request
-                                              ))
-
-                image, gray_image, class_proba = out
-                _, image_url, scores = add_image_models(class_proba,
-                                                               image,
-                                                               gray_image)
-                if os.path.exists(path):
-                    os.remove(path)
-                return render_to_response('emotion/single_image.html',
-                                          {'url': image_url,
-                                           'scores': scores},
-                                          context_instance=RequestContext(
-                                              request))
-            except:
-                return render_to_response('emotion/image_bad.html',
-                                              {'error_message':
-                                              'Unexpected error!'},
-                                              context_instance=RequestContext(
-                                                  request
-                                              ))
-    else:
-        form = ImageForm()
-
-    vform = VideoForm()
-    return render_to_response('emotion/index.html', {'i_form': form,
-                                                     'v_form': vform},
+    return render_to_response('emotion/single_image.html',
+                              {'url': url,
+                               'is_static': True,
+                               'scores': scores},
                               context_instance=RequestContext(request))
 
 
@@ -128,7 +61,6 @@ class UploadImageFromURLView(FormView):
     def form_valid(self, form):
         url = form.data['url']
         domain, path = split_url(url)
-        filename = get_url_tail(path)
 
         if not image_exists(domain, path):
             return self._invalidate(form,
@@ -169,6 +101,7 @@ class UploadImageFromURLView(FormView):
             os.remove(path)
         return render_to_response('emotion/single_image.html',
                                   {'url': image_url,
+                                   'is_static': False,
                                    'scores': scores},
                                   context_instance=RequestContext(
                                       self.request))
