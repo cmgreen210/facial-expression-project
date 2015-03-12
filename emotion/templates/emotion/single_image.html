@@ -10,12 +10,15 @@
                 {% if is_static %}
                     <img class="center-block img-rounded" src="{% static url %}"/>
                 {% else %}
-                    <img class="center-block img-rounded" src="{{ url }} %}"/>
+                    <img class="center-block img-rounded" src="{{ url }}"/>
                 {% endif %}
             </div>
-            {% include "emotion/probability.html" with value=scores.happy title="Happy" %}
-            {% include "emotion/probability.html" with value=scores.sad title="Sad" %}
-            {% include "emotion/probability.html" with value=scores.surprised title="Surprised "%}
+            <div class="container">
+
+                {% include "emotion/probability.html" with value=scores.happy title="Happy" %}
+                {% include "emotion/probability.html" with value=scores.sad title="Sad" %}
+                {% include "emotion/probability.html" with value=scores.surprised title="Surprised "%}
+            </div>
         </div>
     </div>
 {% endblock %}
