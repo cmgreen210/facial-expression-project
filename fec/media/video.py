@@ -160,11 +160,15 @@ class VideoFileClassifier(VideoStreamClassifyBase):
         if self._capture:
             self._capture.release()
 
+        self.transformed_images = None
+        self.original_images = None
+
         if self.images is not None:
             count = 0
 
             self.transformed_images = []
             self.original_images = []
+
             images_to_gl = []
             for im in self.images:
                 if im[0] is None or im[1] is None:

@@ -24,21 +24,39 @@ def get_video(request):
     if request.method == 'POST':
         form = VideoForm(request.POST, request.FILES)
         if form.is_valid():
-            video_file = request.FILES['video_file']
-            _, ext = os.path.splitext(video_file._name)
-            path = default_storage.save('tmp_video/vid' + ext,
-                                        ContentFile(video_file.read()))
-            path = pjoin(settings.MEDIA_ROOT, path)
-            classifications, images = run_video_classifier(path, frame_skip=1)
-            _, image_clfs = \
-                add_video_image_models(classifications, images)
+            try:
+                video_file = request.FILES['video_file']
+                _, ext = os.path.splitext(video_file._name)
+                path = default_storage.save('tmp_video/vid' + ext,
+                                            ContentFile(video_file.read()))
+                path = pjoin(settings.MEDIA_ROOT, path)
+                classifications, images = run_video_classifier(path, frame_skip=1)
+                _, image_clfs = \
+                    add_video_image_models(classifications, images)
 
-            if os.path.exists(path):
-                os.remove(path)
+                if os.path.exists(path):
+                    os.remove(path)
 
-            return render_to_response('emotion/image_array.html',
-                                      {'images': image_clfs},
-                                      context_instance=RequestContext(request))
+                if image_clfs[0] is None:
+                    return render_to_response('emotion/image_bad.html',
+                                              {'error_message':
+                                              "Didn't find any faces! Try"
+                                              " another clip."},
+                                              context_instance=RequestContext(
+                                                  request
+                                              ))
+
+                return render_to_response('emotion/image_array.html',
+                                          {'images': image_clfs},
+                                          context_instance=RequestContext(
+                                              request))
+            except:
+                return render_to_response('emotion/image_bad.html',
+                                              {'error_message':
+                                              'Unexpected error!'},
+                                              context_instance=RequestContext(
+                                                  request
+                                              ))
     else:
         form = VideoForm()
 
@@ -54,31 +72,42 @@ def get_image(request):
     if request.method == 'POST':
         form = ImageForm(request.POST, request.FILES)
         if form.is_valid():
-            image_file = request.FILES['image_file']
-            _, ext = os.path.splitext(image_file. _name)
-            path = default_storage.save('tmp_img/img' + ext,
-                                        ContentFile(image_file.read()))
-            path = pjoin(settings.MEDIA_ROOT, path)
-            out = run_image_classifier(path)
-            if out is None:
-                return render_to_response('emotion/image_bad.html',
-                                          {'error_message':
-                                          'No faces were found in the image. '
-                                          'Please try another!'},
-                                          context_instance=RequestContext(
-                                              request
-                                          ))
+            try:
+                image_file = request.FILES['image_file']
+                _, ext = os.path.splitext(image_file. _name)
+                path = default_storage.save('tmp_img/img' + ext,
+                                            ContentFile(image_file.read()))
+                path = pjoin(settings.MEDIA_ROOT, path)
+                out = run_image_classifier(path)
+                if out is None:
+                    if os.path.exists(path):
+                        os.remove(path)
+                    return render_to_response('emotion/image_bad.html',
+                                              {'error_message':
+                                              'No faces were found in the '
+                                              'image. Please try another!'},
+                                              context_instance=RequestContext(
+                                                  request
+                                              ))
 
-            image, gray_image, class_proba = out
-            _, image_url, scores = add_image_models(class_proba,
-                                                           image,
-                                                           gray_image)
-            if os.path.exists(path):
-                os.remove(path)
-            return render_to_response('emotion/single_image.html',
-                                      {'url': image_url,
-                                       'scores': scores},
-                                      context_instance=RequestContext(request))
+                image, gray_image, class_proba = out
+                _, image_url, scores = add_image_models(class_proba,
+                                                               image,
+                                                               gray_image)
+                if os.path.exists(path):
+                    os.remove(path)
+                return render_to_response('emotion/single_image.html',
+                                          {'url': image_url,
+                                           'scores': scores},
+                                          context_instance=RequestContext(
+                                              request))
+            except:
+                return render_to_response('emotion/image_bad.html',
+                                              {'error_message':
+                                              'Unexpected error!'},
+                                              context_instance=RequestContext(
+                                                  request
+                                              ))
     else:
         form = ImageForm()
 
