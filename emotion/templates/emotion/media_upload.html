@@ -10,11 +10,12 @@
                         {{ v_form.video_file.errors }}
                         {{ v_form.video_file }}
                     </p>
-                    <input type="submit" value="Submit"/>
+                    <input type="submit" value="Submit" style="text-align: center;"/>
             </form>
         </div>
         <div class="col-md-6">
             <form action="{% url 'emotion.views.get_image' %}" method="post" enctype="multipart/form-data">
+
                     {% csrf_token %}
                     <p>{{ i_form.non_field_errors }}</p>
                     <p>{{ i_form.image_file.label_tag }} {{ i_form.image_file.help_text }}</p>
