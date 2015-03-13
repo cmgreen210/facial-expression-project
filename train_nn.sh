@@ -7,7 +7,7 @@ MODEL=$1
 MAX_IT=$2
 DATA=$3
 
-PY='/usr/local/bin/python2.7'
+PY='/usr/bin/python'
 
 if [ ! -d "checkpoint" ]; then
     mkdir "checkpoint"
