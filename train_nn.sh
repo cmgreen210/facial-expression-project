@@ -21,6 +21,8 @@ if [ -d "${OUT_DIR}" ]; then
 fi
 
 mkdir "${OUT_DIR}"
+mkdir "${OUT_DIR}/chkpt"
+
 
 PARAMS="${OUT_DIR}/net.conf"
 cp "${MODEL}" "${OUT_DIR}/net.conf"

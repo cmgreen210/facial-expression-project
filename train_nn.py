@@ -17,7 +17,9 @@ if __name__ == '__main__':
     if not net.verify():
         print("Invalid neural net! Exiting....")
 
-    check_point_path = sys.argv[2]
+    output_dir = sys.argv[2]
+    check_point_path = pjoin(output_dir, 'chkpt')
+
     data_path = sys.argv[3]
     max_iterations = int(sys.argv[4])
 
@@ -53,8 +55,7 @@ if __name__ == '__main__':
     test_f1 = f1_score(ytest, ypred)
     test_precision = precision_score(ytest, ypred)
 
-    dir, _ = opath.split(check_point_path)
-    result_file = open(pjoin(dir, 'results.txt'), 'w')
+    result_file = open(pjoin(output_dir, 'results.txt'), 'w')
 
     write = lambda val: print(val, file=result_file)
     write('accuracy, {0:1.6f}'.format(eval['accuracy']))
@@ -71,5 +72,3 @@ if __name__ == '__main__':
             row['count']
         ))
     result_file.close()
-
-    net.get_net().save(pjoin(dir, 'net.conf'))
