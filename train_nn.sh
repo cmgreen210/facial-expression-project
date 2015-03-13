@@ -6,6 +6,7 @@
 MODEL=$1
 MAX_IT=$2
 DATA=$3
+EMAIL=$4
 
 PY='/usr/bin/python'
 
@@ -32,3 +33,9 @@ OUTPUT="${OUT_DIR}/output.txt"
 ${PY} train_nn.py \
     "${PARAMS}" "${OUT_DIR}" "${DATA}" "${MAX_IT}"\
 > "${OUTPUT}"
+
+TAR_OUTPUT="${OUT_DIR}.tar.gz"
+
+tar -zcvf "${TAR_OUTPUT}" "${OUT_DIR}"
+
+echo "GraphLab Training Results" | mutt -a "${TAR_OUTPUT}" -s "NN Training Run" -- "${EMAIL}"
