@@ -1,18 +1,32 @@
 #!/bin/bash
 
-RUN_NAME=$1
+# MODEL is the path to the neural net config
+# MAX_IT is the maximum number of iterations
+# DATA Path to pickled fer files
+MODEL=$1
 MAX_IT=$2
-MODEL=$3
+DATA=$3
 
 PY='/usr/local/bin/python2.7'
 
-BASE_DIR="/home/ec2-user/face-emotion-classifier"
-CHK_DIR="${BASE_DIR}/checkpoint/${RUN_NAME}"
-PARAMS="${CHK_DIR}/net_params.txt"
-DATA="/home/ec2-user/data/fer_data.pkl"
+if [ ! -d "checkpoint" ]; then
+    mkdir "checkpoint"
+fi
 
-OUTPUT="${CHK_DIR}/output.txt"
+STAMP=$(date +"%Y%m%d_%H%M%S")
+OUT_DIR="checkpoint/train_$STAMP"
 
-${PY} train_cnn.py \
-    "${PARAMS}" "${CHK_DIR}/check_point" "${DATA}" "${MAX_IT}" "${MODEL}"\
+if [ -d "${OUT_DIR}" ]; then
+    rm -rf "${OUT_DIR}"
+fi
+
+mkdir "${OUT_DIR}"
+
+PARAMS="${OUT_DIR}/net.conf"
+cp "${MODEL}" "${OUT_DIR}/net.conf"
+
+OUTPUT="${OUT_DIR}/output.txt"
+
+${PY} train_nn.py \
+    "${PARAMS}" "${OUT_DIR}" "${DATA}" "${MAX_IT}"\
 > "${OUTPUT}"
