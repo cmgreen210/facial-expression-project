@@ -8,15 +8,6 @@
             <form action="{% url 'image' %}" method="post">
                 <div class="form-group">
                     {% csrf_token %}
-                    {% for hidden in form.hidden_fields %}
-                        {{ hidden }}
-                    {% endfor %}
-                    {# Include the visible fields #}
-                    {% for field in form.visible_fields %}
-                        <div class="fieldWrapper">
-                            {{ field.errors }}
-                        </div>
-                    {% endfor %}
                     {{ form|bootstrap_inline }}
                     <div class="span4 offset4 text-center">
                         <button type="submit" class="btn btn-lg btn-info">Upload &#8594;</button>
