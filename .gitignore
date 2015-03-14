@@ -10,3 +10,5 @@ checkpoint/*
 setup_aws.sh
 media/*
 build/*
+django-facial-expression/build/*
+face-emotion-classifier/build/*
