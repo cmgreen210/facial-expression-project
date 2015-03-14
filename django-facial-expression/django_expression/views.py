@@ -9,9 +9,9 @@ from PIL import Image
 from django.views.generic.edit import FormView
 from django.contrib.staticfiles import finders
 from forms import UploadImageFromURLForm
-from .pipeline import run_image_classifier
-from .models import add_image_models, emotion_dictionary
-from validation import *
+from django_expression.pipeline import run_image_classifier
+from django_expression.models import add_image_models, emotion_dictionary
+from django_expression.validation import *
 
 
 def home_page(request):

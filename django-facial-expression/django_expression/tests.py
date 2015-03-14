@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.core.exceptions import ValidationError
 import pep8
 
-from expression.models import validate_request_type
+from django_expression.models import validate_request_type
 
 
 class ValidatorTests(TestCase):
