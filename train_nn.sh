@@ -38,4 +38,5 @@ TAR_OUTPUT="${OUT_DIR}.tar.gz"
 
 tar -zcvf "${TAR_OUTPUT}" "${OUT_DIR}"
 
-echo "GraphLab Training Results" | mutt -a "${TAR_OUTPUT}" -s "NN Training Run" -- "${EMAIL}"
+cat "${OUT_DIR}/results.txt" | mutt -s "NN Training Run" -- "${EMAIL}"
+aws s3 cp "${TAR_OUTPUT}" "s3://cmgreen210-emotions/"
