@@ -1,5 +1,5 @@
 from django.conf.urls import url, patterns
-from emotion.views import *
+from expression.views import *
 
 
 urlpatterns = patterns('',

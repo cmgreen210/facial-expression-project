@@ -6,8 +6,8 @@ from django.conf import settings
 from PIL import Image
 from os.path import join as pjoin
 from forms import UploadImageFromURLForm
-from emotion.pipeline import run_image_classifier
-from emotion.models import add_image_models, emotion_dictionary
+from expression.pipeline import run_image_classifier
+from expression.models import add_image_models, emotion_dictionary
 from django.views.generic.edit import FormView
 from validation import *
 import StringIO
@@ -17,7 +17,7 @@ from itertools import izip
 
 def home_page(request):
     form = UploadImageFromURLForm()
-    return render(request, 'emotion/media_upload.html',
+    return render(request, 'expression/media_upload.html',
                   {'form': form})
 
 
@@ -26,7 +26,7 @@ def example_view(request, ex_name):
     url = os.path.join('image', ex_name + '.jpg')
     path = finders.find(url)
     if path is None:
-        return render_to_response('emotion/image_bad.html',
+        return render_to_response('expression/image_bad.html',
                                       {'error_message':
                                       'Example image was not found!'},
                                       context_instance=RequestContext(
@@ -43,7 +43,7 @@ def example_view(request, ex_name):
     for c, p in izip(classes, prob):
         scores[emotion_dictionary[c]] = p
 
-    return render_to_response('emotion/single_image.html',
+    return render_to_response('expression/single_image.html',
                               {'url': url,
                                'is_static': True,
                                'scores': scores},
@@ -51,7 +51,7 @@ def example_view(request, ex_name):
 
 
 class UploadImageFromURLView(FormView):
-    template_name = 'emotion/media_upload.html'
+    template_name = 'expression/media_upload.html'
     form_class = UploadImageFromURLForm
 
     def _invalidate(self, form, message):
@@ -85,7 +85,7 @@ class UploadImageFromURLView(FormView):
         if out is None:
             if os.path.exists(path):
                 os.remove(path)
-            return render_to_response('emotion/image_bad.html',
+            return render_to_response('expression/image_bad.html',
                                       {'error_message':
                                       'No faces were found in the '
                                       'image. Please try another!'},
@@ -99,7 +99,7 @@ class UploadImageFromURLView(FormView):
                                                 gray_image)
         if os.path.exists(path):
             os.remove(path)
-        return render_to_response('emotion/single_image.html',
+        return render_to_response('expression/single_image.html',
                                   {'url': image_url,
                                    'is_static': False,
                                    'scores': scores},

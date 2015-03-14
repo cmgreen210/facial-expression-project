@@ -1,5 +1,5 @@
 from django.test import TestCase
-from emotion.models import validate_request_type
+from expression.models import validate_request_type
 from django.core.exceptions import ValidationError
 import pep8
 import os

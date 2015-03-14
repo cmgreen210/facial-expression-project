@@ -38,17 +38,17 @@ class LogisticBaseModel(ClassifierBase):
 
 
 if __name__ == '__main__':
-    data_path = "data/emotion.pkl"
+    data_path = "data/expression.pkl"
     df = pd.read_pickle(data_path)
 
-    cond_happy = df['emotion'] == 3
-    cond_sad = df['emotion'] == 4
-    cond_surprise = df['emotion'] == 5
+    cond_happy = df['expression'] == 3
+    cond_sad = df['expression'] == 4
+    cond_surprise = df['expression'] == 5
 
     df = df[cond_happy | cond_sad | cond_surprise]
 
     x = np.array(df['pixels'].tolist())
-    y = np.array(df['emotion'].values)
+    y = np.array(df['expression'].values)
 
 
     row_means = np.mean(x, axis=1)

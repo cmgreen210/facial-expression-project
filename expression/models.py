@@ -55,7 +55,7 @@ def original_image_file(instance, filename):
 class ImageClassification(models.Model):
     """
     Stores the information for a single image frame
-    classification, related to :model:`emotion.ClassificationRequest`.
+    classification, related to :model:`expression.ClassificationRequest`.
 
     The 48x48 pixel image is stored row-wise as a csv string.
     """

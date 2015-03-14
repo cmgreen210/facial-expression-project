@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import emotion.models
+import expression.models
 
 
 class Migration(migrations.Migration):
@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('timestamp', models.DateTimeField(auto_now=True)),
-                ('type', models.PositiveIntegerField(help_text=b'0 for video, 1 for image,                                                 any other undefined', validators=[emotion.models.validate_request_type])),
+                ('type', models.PositiveIntegerField(help_text=b'0 for video, 1 for image,                                                 any other undefined', validators=[expression.models.validate_request_type])),
                 ('rand_string', models.CharField(max_length=10)),
             ],
             options={
@@ -27,8 +27,8 @@ class Migration(migrations.Migration):
             name='ImageClassification',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('gray_image', models.ImageField(upload_to=emotion.models.gray_scale_file)),
-                ('image', models.ImageField(upload_to=emotion.models.original_image_file)),
+                ('gray_image', models.ImageField(upload_to=expression.models.gray_scale_file)),
+                ('image', models.ImageField(upload_to=expression.models.original_image_file)),
                 ('image_rank', models.IntegerField()),
                 ('rank1', models.PositiveIntegerField()),
                 ('rank1_prob', models.FloatField(default=0.0)),
@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
                 ('rank2_prob', models.FloatField(default=0.0)),
                 ('rank3', models.PositiveIntegerField()),
                 ('rank3_prob', models.FloatField(default=0.0)),
-                ('request', models.ForeignKey(to='emotion.ClassificationRequest')),
+                ('request', models.ForeignKey(to='expression.ClassificationRequest')),
             ],
             options={
             },

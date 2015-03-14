@@ -1,4 +1,4 @@
-{% extends 'emotion/index.html' %}
+{% extends 'expression/index.html' %}
 {% load bootstrap %}
 {% load staticfiles %}
 
@@ -18,9 +18,9 @@
         <hr>
         <div class="row">
             <h2 align="center">Examples</h2>
-            {% include "emotion/example_image.html" with title="Happy" %}
-            {% include "emotion/example_image.html" with title="Sad" %}
-            {% include "emotion/example_image.html" with title="Surprised" %}
+            {% include "expression/example_image.html" with title="Happy" %}
+            {% include "expression/example_image.html" with title="Sad" %}
+            {% include "expression/example_image.html" with title="Surprised" %}
         </div>
     </div>
 {% endblock %}

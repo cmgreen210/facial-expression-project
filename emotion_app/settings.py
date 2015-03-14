@@ -37,7 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrapform',
-    'emotion',
+    'expression',
 )
 
 MIDDLEWARE_CLASSES = (
