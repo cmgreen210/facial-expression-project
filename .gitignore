@@ -9,3 +9,4 @@ checkpoint/*
 *~
 setup_aws.sh
 media/*
+build/*

@@ -1,5 +1,4 @@
 from fec.classifier.gl_classifier import GraphLabClassifierFromFile
-from fec.media.video import VideoFileClassifier
 from fec.media.image import ImageFileClassifier
 import os
 
