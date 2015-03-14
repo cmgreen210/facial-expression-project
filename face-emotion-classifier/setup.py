@@ -30,11 +30,11 @@ setup(
         'fec.test': ['data/*', 'data/gl_mdl/*', 'data/img_10/*']
     },
     # Details
-    url="https://github.com/cmgreen210/face-expression-classifier",
+    url="https://github.com/cmgreen210/face-django_expression-classifier",
 
     #
     # license="LICENSE.txt",
-    description="Facial expression classification from images and video",
+    description="Facial django_expression classification from images and video",
 
     long_description=open("README.md").read(),
 )

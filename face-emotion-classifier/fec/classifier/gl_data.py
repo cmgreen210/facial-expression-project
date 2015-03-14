@@ -47,7 +47,7 @@ if __name__ == '__main__':
     df = _load_original_data_into_df(fer_data)
     this_path = os.path.abspath(__file__)
     this_dir, _ = os.path.split(this_path)
-    df_path = os.path.join(this_dir, 'data', 'expression.pkl')
+    df_path = os.path.join(this_dir, 'data', 'django_expression.pkl')
     df.to_pickle(df_path)
     # df.to_csv('/Users/chris/tmp/fer_processed.csv')
     # con = get_connection()

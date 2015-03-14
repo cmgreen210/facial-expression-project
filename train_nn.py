@@ -25,14 +25,14 @@ if __name__ == '__main__':
 
     df = pd.read_pickle(data_path)
 
-    cond_happy = df['expression'] == 3
-    cond_sad = df['expression'] == 4
-    cond_surprise = df['expression'] == 5
+    cond_happy = df['django_expression'] == 3
+    cond_sad = df['django_expression'] == 4
+    cond_surprise = df['django_expression'] == 5
 
     df = df[cond_happy | cond_sad | cond_surprise]
 
     x = np.array(df['pixels'].tolist())
-    y = np.array(df['expression'].values)
+    y = np.array(df['django_expression'].values)
 
     xtrain, xtest, ytrain, ytest = train_test_split(x, y, train_size=.8)
 

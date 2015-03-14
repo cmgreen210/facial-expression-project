@@ -37,7 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrapform',
-    'expression',
+    'django_expression',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -90,14 +90,5 @@ STATIC_URL = os.path.join(BASE_DIR, 'static/')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 CONTENT_TYPES = ['image']
-VIDEO_TYPES = ['video/quicktime', 'video/mp4']
 IMAGE_TYPES = ['image/jpeg', 'image/png']
-# 2.5MB - 2621440
-# 5MB - 5242880
-# 10MB - 10485760
-# 20MB - 20971520
-# 50MB - 5242880
-# 100MB 104857600
-# 250MB - 214958080
-# 500MB - 429916160
 MAX_UPLOAD_SIZE = 10485760

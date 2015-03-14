@@ -204,10 +204,10 @@ VideoStreamClassifyBase.register(VideoFileClassifier)
 
 
 if __name__ == '__main__':
-    clf = GraphLabClassifierFromFile('/Users/chris/face-expression-classifier'
-                                     '/expression/classifier')
+    clf = GraphLabClassifierFromFile('/Users/chris/face-django_expression-classifier'
+                                     '/django_expression/classifier')
     vid = VideoFileClassifier(clf.predict_proba,
-                              '/Users/chris/face-expression-classifier'
+                              '/Users/chris/face-django_expression-classifier'
                               '/tmp_video/vid.mov')
     vid.start()
     vid.stop()
