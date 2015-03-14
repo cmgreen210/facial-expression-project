@@ -1,7 +1,7 @@
 {% load staticfiles %}
 
 <div class="col-sm-4">
-    {% with 'image/'|add:title|lower|add:'.jpg' as path %}
+    {% with 'expression/image/'|add:title|lower|add:'.jpg' as path %}
         <h3 align="center">{{ title }}</h3>
         <div align="center">
             <a href="/expression/example/{{ title }}">

@@ -23,7 +23,7 @@ def home_page(request):
 
 def example_view(request, ex_name):
     ex_name = ex_name.lower()
-    url = os.path.join('image', ex_name + '.jpg')
+    url = os.path.join('expression','image', ex_name + '.jpg')
     path = finders.find(url)
     if path is None:
         return render_to_response('expression/image_bad.html',
