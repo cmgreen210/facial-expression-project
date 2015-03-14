@@ -9,8 +9,8 @@ from PIL import Image
 from django.views.generic.edit import FormView
 from django.contrib.staticfiles import finders
 from forms import UploadImageFromURLForm
-from expression.pipeline import run_image_classifier
-from expression.models import add_image_models, emotion_dictionary
+from .pipeline import run_image_classifier
+from .models import add_image_models, emotion_dictionary
 from validation import *
 
 
@@ -22,7 +22,7 @@ def home_page(request):
 
 def example_view(request, ex_name):
     ex_name = ex_name.lower()
-    url = os.path.join('django_expression','image', ex_name + '.jpg')
+    url = os.path.join('django_expression', 'image', ex_name + '.jpg')
     path = finders.find(url)
     if path is None:
         return render_to_response('django_expression/image_bad.html',

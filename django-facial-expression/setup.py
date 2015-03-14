@@ -20,7 +20,8 @@ setup(
                               'static/django_expression/fonts/*',
                               'static/django_expression/image/*',
                               'static/django_expression/js/*',
-                              'templates/django_expression/*'],
+                              'templates/django_expression/*',
+                              'classifier/*'],
     },
 
     # Details
