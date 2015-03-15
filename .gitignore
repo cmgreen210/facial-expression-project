@@ -12,3 +12,4 @@ media/*
 build/*
 django-facial-expression/build/*
 face-emotion-classifier/build/*
+venv/*
