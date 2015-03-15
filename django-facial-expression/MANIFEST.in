@@ -1,4 +1,0 @@
-include README.md
-recursive-include expression/static *
-recursive-include expression/templates/expression *
-recursive-include classifier *
