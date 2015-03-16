@@ -49,9 +49,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'emotion_app.urls'
+ROOT_URLCONF = 'fec_app.urls'
 
-WSGI_APPLICATION = 'emotion_app.wsgi.application'
+WSGI_APPLICATION = 'fec_app.wsgi.application'
 
 
 # Database
