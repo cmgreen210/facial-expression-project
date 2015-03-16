@@ -1,5 +1,6 @@
 from fec.classifier.gl_classifier import GraphLabClassifierFromFile
 from fec.media.image import ImageFileClassifier
+from fec.media.image_processing import FaceDetectorProcessor
 import os
 
 
@@ -25,7 +26,8 @@ def get_image_classifier():
 
     if _image_clf is None:
         clf = get_classifier()
-        _image_clf = ImageFileClassifier(clf.predict_proba)
+        face_processor = FaceDetectorProcessor(rect_color=(49, 176, 213))
+        _image_clf = ImageFileClassifier(clf.predict_proba, face_processor)
 
     return _image_clf
 
