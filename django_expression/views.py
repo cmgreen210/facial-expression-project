@@ -20,6 +20,11 @@ def home_page(request):
                   {'form': form})
 
 
+def about_view(request):
+    return render_to_response('django_expression/about.html',
+                              context_instance=RequestContext(request))
+
+
 def example_view(request, ex_name):
     ex_name = ex_name.lower()
     url = os.path.join('django_expression', 'image', ex_name + '.jpg')
