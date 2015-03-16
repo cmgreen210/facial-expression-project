@@ -116,7 +116,7 @@ def add_image_models(predictions, original, scaled):
         rank3_prob=100 * prob[2],
     )
 
-    _save_img_helper(ic.image, Image.fromarray(original.pixel_data))
+    _save_img_helper(ic.image, Image.fromarray(original))
     _save_img_helper(ic.gray_image,
                      Image.fromarray(scaled.pixel_data))
 
