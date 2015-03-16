@@ -42,3 +42,8 @@ body > .container {
 code {
   font-size: 80%;
 }
+
+.form-control {
+    height: 58px;
+    font-size: 22px;
+}
