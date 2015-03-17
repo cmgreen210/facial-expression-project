@@ -2,6 +2,8 @@ from django import forms
 
 
 class UploadImageFromURLForm(forms.Form):
+    """Form to get url of image
+    """
     url = forms.URLField(required=True,
                          label='',
                          error_messages={

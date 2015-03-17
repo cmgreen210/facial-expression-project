@@ -22,6 +22,12 @@ def validate_request_type(value):
 
 
 def create_rand_string(size=10, chars=string.ascii_letters + string.digits):
+    """Create a random string
+
+    :param size: length of random string
+    :param chars: character set to chosse from
+    :return: random string
+    """
     return ''.join(random.SystemRandom().choice(chars) for _ in xrange(size))
 
 
@@ -38,18 +44,30 @@ class ClassificationRequest(models.Model):
     rand_string = models.CharField(max_length=10)
 
 
-def gray_scale_file(instance, filename):
+def gray_scale_file(instance, suffix="-gray.png"):
+    """Grayscale image upload_to callback
+
+    :param instance: ImageField instance
+    :param suffix: file path suffix
+    :return: path to upload image to
+    """
     rand_string = instance.request.rand_string
     image_rank = instance.image_rank
     return os.path.join(rand_string,
-                        str(image_rank) + "-gray.png")
+                        str(image_rank) + suffix)
 
 
-def original_image_file(instance, filename):
+def original_image_file(instance, suffix="-frame.png"):
+    """Image upload_to callback
+
+    :param instance: ImageField instance
+    :param suffix: file path suffix
+    :return: path to upload image to
+    """
     rand_string = instance.request.rand_string
     image_rank = instance.image_rank
     return os.path.join(rand_string,
-                        str(image_rank) + "-frame.png").encode('utf-8')
+                        str(image_rank) + suffix).encode('utf-8')
 
 
 class ImageClassification(models.Model):
@@ -97,6 +115,13 @@ def _image_emotion_score(image_clf):
 
 
 def add_image_models(predictions, original, scaled):
+    """Add ImageClassification model to database
+
+    :param predictions: SFrame predictions from GraphLab classifier
+    :param original: array - image
+    :param scaled: GraphLab image
+    :return: tuple ClassificationRequest, url to image, and prediction probs
+    """
     clf_request = ClassificationRequest(rand_string=create_rand_string(),
                                         type=1)
     clf_request.save()

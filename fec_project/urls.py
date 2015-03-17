@@ -8,5 +8,5 @@ urlpatterns = patterns('',
                        url(r'^fec/', include(
                            'django_expression.urls')),
                        ) + static(settings.MEDIA_URL,
-                                  document_root=settings.MEDIA_ROOT)+ \
-                         static(settings.STATIC_URL)
+                                  document_root=settings.MEDIA_ROOT) +\
+                       static(settings.STATIC_URL)
