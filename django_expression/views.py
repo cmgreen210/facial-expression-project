@@ -15,17 +15,33 @@ from django_expression.validation import *
 
 
 def home_page(request):
+    """Home page view
+
+    :param request: request object
+    :return: http response
+    """
     form = UploadImageFromURLForm()
     return render(request, 'django_expression/media_upload.html',
                   {'form': form})
 
 
 def about_view(request):
+    """About page view
+
+    :param request: http request object
+    :return: http response
+    """
     return render_to_response('django_expression/about.html',
                               context_instance=RequestContext(request))
 
 
 def example_view(request, ex_name):
+    """View for built-in image examples
+
+    :param request: http request
+    :param ex_name: name of example ("Happy", "Sad", or "Surprised")
+    :return: http response
+    """
     ex_name = ex_name.lower()
     url = os.path.join('django_expression', 'image', ex_name + '.jpg')
     path = finders.find(url)
@@ -55,6 +71,8 @@ def example_view(request, ex_name):
 
 
 class UploadImageFromURLView(FormView):
+    """Form view for uploading image from web and classifying
+    """
     template_name = 'django_expression/media_upload.html'
     form_class = UploadImageFromURLForm
 
@@ -63,6 +81,11 @@ class UploadImageFromURLView(FormView):
         return super(UploadImageFromURLView, self).form_invalid(form)
 
     def form_valid(self, form):
+        """Validate form and render to response
+
+        :param form: form to get url from
+        :return: http response
+        """
         url = form.data['url']
         domain, path = split_url(url)
 
