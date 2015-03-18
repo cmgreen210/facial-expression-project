@@ -1,4 +1,5 @@
-# Facial Expression Classification Web App | :smile: :frowning: :open_mouth:
+# Facial Expression Classification Web App 
+# :smile: :frowning: :open_mouth:
 Chris Green, March 2015
 
 ##Contents
