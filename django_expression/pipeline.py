@@ -21,7 +21,7 @@ def get_classifier():
         this_dir, _ = os.path.split(os.path.abspath(__file__))
         p = os.path.join(this_dir, _model_path)
         _model = GraphLabClassifierFromFile(p)
-
+    print _model._model
     return _model
 
 
