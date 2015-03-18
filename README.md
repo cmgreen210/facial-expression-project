@@ -27,6 +27,16 @@ A detailed overview of the facial expression classification package used in this
 
 <a name="install"/>
 ##Installation
+To install and run this app you will need register for [GraphLab Create][7] (Don't worry...it's free). You also need to install [OpenCV][8]. After installing GraphLab and OpenCV run the following bash commands:
+
+```bash
+git clone https://github.com/cmgreen210/facial-expression-project
+cd facial-expression-project
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+open http://127.0.0.1:8000/
+```
 
 [1]: http://www.fec.space "Web App"
 [2]: https://github.com/cmgreen210/facial-expression-classifier "FEC Repo"
@@ -34,3 +44,5 @@ A detailed overview of the facial expression classification package used in this
 [4]: http://www.zipfianacademy.com/ "Zipfian"
 [5]: https://www.kaggle.com/c/challenges-in-representation-learning-facial-expression-recognition-challenge/data "Data"
 [6]: http://en.wikipedia.org/wiki/Convolutional_neural_network "CNN"
+[7]: https://dato.com/products/create/quick-start-guide.html "GraphLab"
+[8]: http://www.opencv.org "OpenCV"
