@@ -12,5 +12,5 @@ A detailed overview of the facial expression classification package used in this
 ##Web App
 
 
-[1]: https://www.fec.space "Web App"
+[1]: http://www.fec.space "Web App"
 [2]: https://github.com/cmgreen210/facial-expression-classifier "FEC Repo"
