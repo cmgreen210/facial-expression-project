@@ -8,7 +8,6 @@ decorator==3.4.0
 dj-database-url==0.3.0
 Django==1.7.6
 django-bootstrap-form==3.2
-Django-Facial-Expression-Classifier-App==0.1.0
 docutils==0.12
 -e git+https://github.com/cmgreen210/facial-expression-classifier@24fe1ce5cd75f85b9fa999279ad589fa553162b9#egg=Face_Emotion_Classifier-origin_HEAD
 gnureadline==6.3.3
