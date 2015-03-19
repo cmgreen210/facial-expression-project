@@ -28,7 +28,7 @@ This [Django][3] project creates a site to showcase the [facial expression class
 
 <a name="model"/>
 ##Model
-A detailed overview of the facial expression classification package used in this app can be found [here][1].
+A detailed overview of the facial expression classification package used in this app can be found [here][2].
 
 <a name="install"/>
 ##Installation
