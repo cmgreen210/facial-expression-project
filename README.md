@@ -33,7 +33,6 @@ A detailed overview of the facial expression classification package used in this
 <a name="install"/>
 ##Installation
 To install and run this app you will need register for [GraphLab Create][7] (Don't worry...it's free). You also need to install [OpenCV][8]. After installing GraphLab and OpenCV run the following bash commands:
-![Sad][https://github.com/cmgreen210/facial-expression-project/blob/master/img/romney.png]
 ```bash
 git clone https://github.com/cmgreen210/facial-expression-project
 cd facial-expression-project
