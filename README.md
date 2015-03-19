@@ -21,7 +21,7 @@ Can we teach a machine to recognize human emotions? That was the question I want
 
 <a name="app"/>
 ##Web App
-This [Django][3] project creates a site to showcase the [facial expression classifier][2] package by loading in images from the the web and classifying them. To use the site simply add a url of an image with a face in it and see what you get. Be sure to make sure it is a valid and accessible image. For example submitting this [url][http://images.sodahead.com/polls/003482687/2111968424_sad_mitt_romney_face_answer_1_xlarge.jpeg] gives:
+This [Django][3] project creates a site to showcase the [facial expression classifier][2] package by loading in images from the the web and classifying them. To use the site simply add a url of an image with a face in it and see what you get. Be sure to make sure it is a valid and accessible image. For example submitting this [url](http://images.sodahead.com/polls/003482687/2111968424_sad_mitt_romney_face_answer_1_xlarge.jpeg) gives:
 
 ![sad](https://github.com/cmgreen210/facial-expression-project/blob/master/img/romney.png)
 
