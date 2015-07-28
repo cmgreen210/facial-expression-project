@@ -1,0 +1,46 @@
+{% extends 'django_expression/index.html' %}
+
+{% block jumbo_title %}About{% endblock %}
+{% block jumbo_content %}{% endblock %}
+
+{% block content %}
+    <p class="lead">
+        Finding the challenging problem of image classification both fascinating and
+        rewarding I decided upon the task of facial expression classification for
+        my capstone project during the winter 2015 <a href="http://www.zipfianacademy.com/" target="_blank">Zipfian Academy</a>
+        Data Science Cohort at <a href="http://www.galvanize.it/" target="_blank">Galvanize</a>.
+    </p>
+    <p class="lead">
+        The data I used can be found <a href="https://www.kaggle.com/c/challenges-in-representation-learning-facial-expression-recognition-challenge/data">here</a>.
+        In order to make the project feasible in the allotted time I reduced the
+        set down to three classes (Happy, Sad, and Surprised), which still left approximately
+        19,000 labeled images to train on. For classification I trained a
+        <a href="http://en.wikipedia.org/wiki/Convolutional_neural_network" target="_blank">
+            convolutional neural network
+        </a>
+        using
+        <a href="https://dato.com/products/create/gpu_install.html" target="_blank">
+            GraphLab Create™ with GPU Acceleration
+        </a>
+        and acheived 75% accuracy. The modeling code can be found on
+        <a href="https://github.com/cmgreen210/facial-expression-classifier" target="_blank">
+            GitHub.
+        </a>
+    </p>
+    <p class="lead">
+        Technologies used for this project:
+        <ul class="lead">
+            <li>Python</li>
+            <li>GraphLab Create™ with GPU Acceleration</li>
+            <li>OpenCV</li>
+            <li>Numpy, Pandas</li>
+            <li>AWS EC2 GPU Instance</li>
+            <li>Django (web)</li>
+        </ul>
+    </p>
+    <p class="lead">
+        If you have any questions shoot me an email at
+        <a href="mailto:cmgreen210@gmail.com">cmgreen210@gmail.com.</a>
+    </p>
+    <a class="btn btn-info btn-lg" role="button" href="/">Try it out! &#8594;</a>
+{% endblock %}

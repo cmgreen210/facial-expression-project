@@ -1,0 +1,26 @@
+{% extends 'django_expression/index.html' %}
+{% load bootstrap %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="container">
+        <div class="row-fluid">
+            <form action="{% url 'image' %}" method="post">
+                <div class="form-group">
+                    {% csrf_token %}
+                    {{ form|bootstrap_inline }}
+                    <div class="span4 offset4 text-center">
+                        <button type="submit" class="btn btn-lg btn-info">Upload &#8594;</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <hr>
+        <div class="row">
+            <h2 align="center">Examples</h2>
+            {% include "django_expression/example_image.html" with title="Happy" %}
+            {% include "django_expression/example_image.html" with title="Sad" %}
+            {% include "django_expression/example_image.html" with title="Surprised" %}
+        </div>
+    </div>
+{% endblock %}
